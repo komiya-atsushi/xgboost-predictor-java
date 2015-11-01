@@ -1,0 +1,15 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+version '0.1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
