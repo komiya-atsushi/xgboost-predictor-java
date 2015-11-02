@@ -11,5 +11,8 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile(group: 'junit', name: 'junit', version: '4.12') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    testCompile group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
 }
