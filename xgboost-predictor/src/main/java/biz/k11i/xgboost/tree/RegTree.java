@@ -1,9 +1,9 @@
 package biz.k11i.xgboost.tree;
 
+import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Regression tree.
@@ -40,20 +40,20 @@ public class RegTree {
      * @param root_id starting root index
      * @return leaf index
      */
-    public int getLeafIndex(Map<Integer, Float> feat, int root_id) {
+    public int getLeafIndex(FVec feat, int root_id) {
         int pid = root_id;
 
         while (!nodes[pid].is_leaf()) {
             int split_index = nodes[pid].split_index();
-            pid = getNext(pid, feat.get(split_index));
+            pid = getNext(pid, feat.fvalue(split_index));
         }
 
         return pid;
     }
 
-    private int getNext(int pid, Float fvalue) {
+    private int getNext(int pid, double fvalue) {
         Node node = nodes[pid];
-        if (fvalue == null) {
+        if (Double.isNaN(fvalue)) {
             return nodes[pid].cdefault();
         }
 

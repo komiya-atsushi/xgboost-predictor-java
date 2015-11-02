@@ -1,9 +1,9 @@
 package biz.k11i.xgboost.gbm;
 
+import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Interface of gradient boosting model.
@@ -45,7 +45,7 @@ public interface GradBooster {
      * @param ntree_limit limit the number of trees used in prediction
      * @return prediction result
      */
-    double[] predict(Map<Integer, Float> feat, int ntree_limit);
+    double[] predict(FVec feat, int ntree_limit);
 
     /**
      * Predicts the leaf index of each tree. This is only valid in gbtree predictor.
@@ -54,7 +54,7 @@ public interface GradBooster {
      * @param ntree_limit limit the number of trees used in prediction
      * @return predicted leaf indexes
      */
-    int[] predictLeaf(Map<Integer, Float> feat, int ntree_limit);
+    int[] predictLeaf(FVec feat, int ntree_limit);
 }
 
 abstract class GBBase implements GradBooster {

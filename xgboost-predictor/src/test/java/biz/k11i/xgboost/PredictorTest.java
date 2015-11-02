@@ -1,5 +1,6 @@
 package biz.k11i.xgboost;
 
+import biz.k11i.xgboost.util.FVec;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -28,7 +29,7 @@ public class PredictorTest {
             "multi-softprob",
     };
 
-    private static final List<Map<Integer, Float>> TEST_DATA;
+    private static final List<FVec> TEST_DATA;
 
     static {
         try {
@@ -38,12 +39,12 @@ public class PredictorTest {
         }
     }
 
-    static List<Map<Integer, Float>> loadTestData() throws IOException {
+    static List<FVec> loadTestData() throws IOException {
         try (InputStream stream = PredictorTest.class.getResourceAsStream("model/agaricus.txt.test");
              InputStreamReader isr = new InputStreamReader(stream);
              BufferedReader reader = new BufferedReader(isr)) {
 
-            List<Map<Integer, Float>> result = new ArrayList<>();
+            List<FVec> result = new ArrayList<>();
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -58,7 +59,7 @@ public class PredictorTest {
                     feat.put(Integer.parseInt(pair[0]), Float.parseFloat(pair[1]));
                 }
 
-                result.add(feat);
+                result.add(FVec.Transformer.fromMap(feat));
             }
 
             return result;
@@ -93,46 +94,46 @@ public class PredictorTest {
     }
 
     interface PredictorFunction<T> {
-        T predict(Map<Integer, Float> feat);
+        T predict(FVec feat);
     }
 
     @Theory
     public void testPredict(String modelName) throws IOException {
         final Predictor predictor = newPredictor("model/" + modelName + ".model");
 
-        List<Map<Integer, Float>> data = loadTestData();
+        List<FVec> data = loadTestData();
 
         verifyDouble(modelName, "predict", new PredictorFunction<double[]>() {
             @Override
-            public double[] predict(Map<Integer, Float> feat) {
+            public double[] predict(FVec feat) {
                 return predictor.predict(feat);
             }
         });
 
         verifyDouble(modelName, "predict_ntree", new PredictorFunction<double[]>() {
             @Override
-            public double[] predict(Map<Integer, Float> feat) {
+            public double[] predict(FVec feat) {
                 return predictor.predict(feat, false, 1);
             }
         });
 
         verifyDouble(modelName, "margin", new PredictorFunction<double[]>() {
             @Override
-            public double[] predict(Map<Integer, Float> feat) {
+            public double[] predict(FVec feat) {
                 return predictor.predict(feat, true);
             }
         });
 
         verifyInt(modelName, "leaf", new PredictorFunction<int[]>() {
             @Override
-            public int[] predict(Map<Integer, Float> feat) {
+            public int[] predict(FVec feat) {
                 return predictor.predictLeaf(feat);
             }
         });
 
         verifyInt(modelName, "leaf_ntree", new PredictorFunction<int[]>() {
             @Override
-            public int[] predict(Map<Integer, Float> feat) {
+            public int[] predict(FVec feat) {
                 return predictor.predictLeaf(feat, 2);
             }
         });

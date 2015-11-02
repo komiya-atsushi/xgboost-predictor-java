@@ -1,10 +1,10 @@
 package biz.k11i.xgboost.gbm;
 
-import biz.k11i.xgboost.util.ModelReader;
 import biz.k11i.xgboost.tree.RegTree;
+import biz.k11i.xgboost.util.FVec;
+import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Gradient boosted tree implementation.
@@ -39,7 +39,7 @@ public class GBTree extends GBBase {
     }
 
     @Override
-    public double[] predict(Map<Integer, Float> feat, int ntree_limit) {
+    public double[] predict(FVec feat, int ntree_limit) {
         double[] preds = new double[mparam.num_output_group];
         for (int gid = 0; gid < mparam.num_output_group; gid++) {
             preds[gid] = pred(feat, gid, 0, ntree_limit);
@@ -47,7 +47,7 @@ public class GBTree extends GBBase {
         return preds;
     }
 
-    double pred(Map<Integer, Float> feat, int bst_group, int root_index, int ntree_limit) {
+    double pred(FVec feat, int bst_group, int root_index, int ntree_limit) {
         int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 
         double psum = 0;
@@ -66,12 +66,12 @@ public class GBTree extends GBBase {
     }
 
     @Override
-    public int[] predictLeaf(Map<Integer, Float> feat, int ntree_limit) {
+    public int[] predictLeaf(FVec feat, int ntree_limit) {
         return predPath(feat, 0, ntree_limit);
     }
 
 
-    int[] predPath(Map<Integer, Float> feat, int root_index, int ntree_limit) {
+    int[] predPath(FVec feat, int root_index, int ntree_limit) {
         int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 
         int[] leafIndex = new int[treeleft];
