@@ -9,20 +9,22 @@ import java.util.Map;
  * Interface of gradient boosting model.
  */
 public interface GradBooster {
-    /**
-     * Creates a gradient booster from given name.
-     *
-     * @param name name of gradient booster
-     * @return created gradient booster
-     */
-    static GradBooster createGradBooster(String name) {
-        if ("gbtree".equals(name)) {
-            return new GBTree();
+    class Factory {
+        /**
+         * Creates a gradient booster from given name.
+         *
+         * @param name name of gradient booster
+         * @return created gradient booster
+         */
+        public static GradBooster createGradBooster(String name) {
+            if ("gbtree".equals(name)) {
+                return new GBTree();
+            }
+
+            // gblinear is not supported yet
+
+            throw new IllegalArgumentException(name + " is not supported model.");
         }
-
-        // gblinear is not supported yet
-
-        throw new IllegalArgumentException(name + " is not supported model.");
     }
 
     void setNumClass(int num_class);

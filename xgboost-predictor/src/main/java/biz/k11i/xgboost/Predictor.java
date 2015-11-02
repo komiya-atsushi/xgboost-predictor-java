@@ -38,7 +38,7 @@ public class Predictor {
 
     void initObjGbm() {
         obj = ObjFunction.fromName(name_obj);
-        gbm = GradBooster.createGradBooster(name_gbm);
+        gbm = GradBooster.Factory.createGradBooster(name_gbm);
         gbm.setNumClass(mparam.num_class);
     }
 
