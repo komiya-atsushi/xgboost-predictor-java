@@ -48,13 +48,17 @@ public class GBTree extends GBBase {
     }
 
     double pred(Map<Integer, Float> feat, int bst_group, int root_index, int ntree_limit) {
-        int maxTrees = Math.min(trees.length, Math.max(trees.length - ntree_limit, 0));
+        int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 
         double psum = 0;
-        for (int i = 0; i < maxTrees; i++) {
+        for (int i = 0; i < trees.length; i++) {
             if (tree_info[i] == bst_group) {
                 int tid = trees[i].getLeafIndex(feat, root_index);
                 psum += trees[i].leafValue(tid);
+
+                if (--treeleft <= 0) {
+                    break;
+                }
             }
         }
 
@@ -68,10 +72,10 @@ public class GBTree extends GBBase {
 
 
     int[] predPath(Map<Integer, Float> feat, int root_index, int ntree_limit) {
-        int maxTrees = Math.min(trees.length, Math.max(trees.length - ntree_limit, 0));
+        int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 
-        int[] leafIndex = new int[trees.length];
-        for (int i = 0; i < maxTrees; i++) {
+        int[] leafIndex = new int[treeleft];
+        for (int i = 0; i < treeleft; i++) {
             leafIndex[i] = trees[i].getLeafIndex(feat, root_index);
         }
         return leafIndex;
