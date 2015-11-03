@@ -4,7 +4,9 @@ buildscript {
     }
 }
 
-version '0.1.0-SNAPSHOT'
+plugins {
+    id 'net.researchgate.release' version '2.3.1'
+}
 
 repositories {
     jcenter()
@@ -15,4 +17,24 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
     testCompile group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
+}
+
+javadoc {
+    options.locale = 'en_US'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
