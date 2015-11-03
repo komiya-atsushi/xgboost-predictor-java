@@ -22,7 +22,7 @@ public class Predictor {
      * Instantiates with the Xgboost model
      *
      * @param in input stream
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     public Predictor(InputStream in) throws IOException {
         ModelReader reader = new ModelReader(in);

@@ -34,7 +34,7 @@ public interface GradBooster {
      *
      * @param reader       input stream
      * @param with_pbuffer whether the incoming data contains pbuffer
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     void loadModel(ModelReader reader, boolean with_pbuffer) throws IOException;
 

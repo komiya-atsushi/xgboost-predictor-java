@@ -17,7 +17,7 @@ public class RegTree {
      * Loads model from stream.
      *
      * @param reader input stream
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     public void loadModel(ModelReader reader) throws IOException {
         param = new Param(reader);

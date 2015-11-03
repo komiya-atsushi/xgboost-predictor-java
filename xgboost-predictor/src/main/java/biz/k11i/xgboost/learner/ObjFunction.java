@@ -38,6 +38,7 @@ public class ObjFunction {
      * Transforms prediction values.
      *
      * @param preds prediction
+     * @return transformed values
      */
     public double[] predTransform(double[] preds) {
         // do nothing
