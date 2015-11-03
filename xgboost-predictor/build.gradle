@@ -38,7 +38,3 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
-
-release {
-    useAutomaticVersion = true
-}
