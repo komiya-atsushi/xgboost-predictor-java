@@ -5,6 +5,8 @@ buildscript {
 }
 
 plugins {
+    id 'maven'
+    id 'maven-publish'
     id 'net.researchgate.release' version '2.3.1'
     id 'com.jfrog.bintray' version '1.4'
 }
@@ -40,10 +42,20 @@ artifacts {
     archives javadocJar
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
 bintray {
     user = project.hasProperty('bintrayUser') ? bintrayUser : ''
     key = project.hasProperty('bintrayKey') ? bintrayKey : ''
-    configurations = ['archives']
+    publications = ['maven']
 
     pkg {
         repo = 'maven'
