@@ -85,6 +85,20 @@ public class HowToUseXgboostPredictor {
 ```
 
 
+# Benchmark
+
+Throughput comparison to [xgboost4j 1.1](https://github.com/dmlc/xgboost/tree/master/java/xgboost4j) by [xgboost-predictor-benchmark](https://github.com/komiya-atsushi/xgboost-predictor-benchmark).
+
+| Feature           | xgboost-predictor | xgboost4j      |
+| ----------------- | ----------------: | -------------: |
+| Model loading     |    49017.60 ops/s | 39669.36 ops/s |
+| Single prediction |  6016955.46 ops/s |  1018.01 ops/s |
+| Batch prediction  |    44985.71 ops/s |     5.04 ops/s |
+| Leaf prediction   | 11115853.34 ops/s |  1076.54 ops/s |
+
+Xgboost-predictor-java is about **6,000 to 10,000 times faster than** xgboost4j on prediction tasks.
+
+
 # Supported models, objective functions and API
 
 - Models
