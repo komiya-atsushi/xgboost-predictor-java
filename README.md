@@ -22,7 +22,7 @@ If you use **Maven**:
   <dependency>
     <groupId>biz.k11i</groupId>
     <artifactId>xgboost-predictor</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
   </dependency>
 </dependencies>
 ```
