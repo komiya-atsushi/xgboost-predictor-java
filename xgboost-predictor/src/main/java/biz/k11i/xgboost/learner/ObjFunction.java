@@ -7,17 +7,13 @@ import java.util.Map;
  * Objective function implementations.
  */
 public class ObjFunction {
-    private static final Map<String, ObjFunction> FUNCTIIONS;
+    private static final Map<String, ObjFunction> FUNCTIONS = new HashMap<>();
 
     static {
-        ObjFunction nop = new ObjFunction();
-        ObjFunction regLogistic = new RegLossObjLogistic();
-
-        FUNCTIIONS = new HashMap<>();
-        FUNCTIIONS.put("binary:logistic", regLogistic);
-        FUNCTIIONS.put("binary:logitraw", nop);
-        FUNCTIIONS.put("multi:softmax", new SoftmaxMultiClassObjClassify());
-        FUNCTIIONS.put("multi:softprob", new SoftmaxMultiClassObjProb());
+        register("binary:logistic", new RegLossObjLogistic());
+        register("binary:logitraw", new ObjFunction());
+        register("multi:softmax", new SoftmaxMultiClassObjClassify());
+        register("multi:softprob", new SoftmaxMultiClassObjProb());
     }
 
     /**
@@ -27,11 +23,21 @@ public class ObjFunction {
      * @return objective function
      */
     public static ObjFunction fromName(String name) {
-        ObjFunction result = FUNCTIIONS.get(name);
+        ObjFunction result = FUNCTIONS.get(name);
         if (result == null) {
             throw new IllegalArgumentException(name + " is not supported objective function.");
         }
         return result;
+    }
+
+    /**
+     * Register an {@link ObjFunction} for a given name.
+     *
+     * @param name name of objective function
+     * @param objFunction objective function
+     */
+    public static void register(String name, ObjFunction objFunction) {
+        FUNCTIONS.put(name, objFunction);
     }
 
     /**
