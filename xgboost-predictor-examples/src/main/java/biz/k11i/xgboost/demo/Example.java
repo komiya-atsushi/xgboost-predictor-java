@@ -5,6 +5,7 @@ import biz.k11i.xgboost.util.FVec;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class Example {
     static List<SimpleEntry<Integer, FVec>> loadData() throws IOException {
         List<SimpleEntry<Integer, FVec>> result = new ArrayList<>();
 
-        for (String line : Files.readAllLines(new File(Example.class.getResource("model/agaricus.txt.test").getPath()).toPath())) {
+        for (String line : Files.readAllLines(new File(Example.class.getResource("model/agaricus.txt.test").getPath()).toPath(), StandardCharsets.UTF_8)) {
             String[] values = line.split(" ");
 
             Map<Integer, Float> map = new HashMap<>();
