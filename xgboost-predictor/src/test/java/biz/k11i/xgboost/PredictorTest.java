@@ -1,10 +1,6 @@
 package biz.k11i.xgboost;
 
 import biz.k11i.xgboost.util.FVec;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,15 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(Theories.class)
-public class PredictorTest {
-    @DataPoints
-    public static final String[] MODEL_NAMES = {
-            "binary-logistic",
-            "binary-logitraw",
-            "multi-softmax",
-            "multi-softprob",
-    };
+public abstract class PredictorTest {
 
     private static final List<FVec> TEST_DATA;
 
@@ -97,50 +85,8 @@ public class PredictorTest {
         T predict(FVec feat);
     }
 
-    @Theory
-    public void testPredict(String modelName) throws IOException {
-        final Predictor predictor = newPredictor("model/" + modelName + ".model");
-
-        List<FVec> data = loadTestData();
-
-        verifyDouble(modelName, "predict", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat);
-            }
-        });
-
-        verifyDouble(modelName, "predict_ntree", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat, false, 1);
-            }
-        });
-
-        verifyDouble(modelName, "margin", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat, true);
-            }
-        });
-
-        verifyInt(modelName, "leaf", new PredictorFunction<int[]>() {
-            @Override
-            public int[] predict(FVec feat) {
-                return predictor.predictLeaf(feat);
-            }
-        });
-
-        verifyInt(modelName, "leaf_ntree", new PredictorFunction<int[]>() {
-            @Override
-            public int[] predict(FVec feat) {
-                return predictor.predictLeaf(feat, 2);
-            }
-        });
-    }
-
-    private void verifyDouble(String modelName, String ext, PredictorFunction<double[]> function) throws IOException {
-        List<double[]> expected = loadExpectedData(String.format("model/%s.%s", modelName, ext));
+    void verifyDouble(String modelType, String modelName, String ext, PredictorFunction<double[]> function) throws IOException {
+        List<double[]> expected = loadExpectedData(String.format("model/%s/%s.%s", modelType, modelName, ext));
 
         for (int i = 0; i < TEST_DATA.size(); i++) {
             double[] predicted = function.predict(TEST_DATA.get(i));
@@ -158,8 +104,8 @@ public class PredictorTest {
         }
     }
 
-    private void verifyInt(String modelName, String ext, PredictorFunction<int[]> function) throws IOException {
-        List<double[]> expected = loadExpectedData(String.format("model/%s.%s", modelName, ext));
+    void verifyInt(String modelType, String modelName, String ext, PredictorFunction<int[]> function) throws IOException {
+        List<double[]> expected = loadExpectedData(String.format("model/%s/%s.%s", modelType, modelName, ext));
 
         for (int i = 0; i < TEST_DATA.size(); i++) {
             int[] predicted = function.predict(TEST_DATA.get(i));
