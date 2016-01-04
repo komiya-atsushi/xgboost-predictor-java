@@ -19,9 +19,9 @@ public interface GradBooster {
         public static GradBooster createGradBooster(String name) {
             if ("gbtree".equals(name)) {
                 return new GBTree();
+            } else if ("gblinear".equals(name)) {
+                return new GBLinear();
             }
-
-            // gblinear is not supported yet
 
             throw new IllegalArgumentException(name + " is not supported model.");
         }
