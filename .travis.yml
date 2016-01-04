@@ -1,0 +1,5 @@
+language: java
+script: ./gradlew clean check
+jdk:
+  - oraclejdk7
+  - openjdk7
