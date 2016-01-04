@@ -1,6 +1,8 @@
 xgboost-predictor-java
 ======================
 
+[![Build Status](https://travis-ci.org/komiya-atsushi/xgboost-predictor-java.svg?branch=master)](https://travis-ci.org/komiya-atsushi/xgboost-predictor-java)
+
 Pure Java implementation of [XGBoost](https://github.com/dmlc/xgboost/) predictor for online prediction tasks.
 
 
