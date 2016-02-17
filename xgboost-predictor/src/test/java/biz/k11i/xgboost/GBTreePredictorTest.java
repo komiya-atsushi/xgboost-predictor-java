@@ -1,6 +1,8 @@
 package biz.k11i.xgboost;
 
+import biz.k11i.xgboost.learner.ObjFunction;
 import biz.k11i.xgboost.util.FVec;
+import org.junit.After;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -21,8 +23,13 @@ public class GBTreePredictorTest extends PredictorTest {
             "multi-softprob",
     };
 
+    @DataPoints
+    public static final boolean[] USE_JAFAMA = { true, false };
+
     @Theory
-    public void testPredict(String modelName) throws IOException {
+    public void testPredict(String modelName, boolean useJafama) throws IOException {
+        ObjFunction.useFastMathExp(useJafama);
+
         final Predictor predictor = newPredictor("model/" + MODEL_TYPE + "/" + modelName + ".model");
 
         verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
@@ -61,4 +68,8 @@ public class GBTreePredictorTest extends PredictorTest {
         });
     }
 
+    @After
+    public void tearDown() {
+        ObjFunction.useFastMathExp(false);
+    }
 }

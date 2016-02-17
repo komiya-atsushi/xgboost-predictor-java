@@ -1,5 +1,7 @@
 package biz.k11i.xgboost.learner;
 
+import net.jafama.FastMath;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +43,23 @@ public class ObjFunction {
     }
 
     /**
+     * Uses Jafama's {@link FastMath#exp(double)} instead of {@link Math#exp(double)}.
+     *
+     * @param useJafama {@code true} if you want to use Jafama's {@link FastMath#exp(double)},
+     *                  or {@code false} if you don't want to use it but JDK's {@link Math#exp(double)}.
+     */
+    public static void useFastMathExp(boolean useJafama) {
+        if (useJafama) {
+            register("binary:logistic", new RegLossObjLogistic_Jafama());
+            register("multi:softprob", new SoftmaxMultiClassObjProb_Jafama());
+
+        } else {
+            register("binary:logistic", new RegLossObjLogistic());
+            register("multi:softprob", new SoftmaxMultiClassObjProb());
+        }
+    }
+
+    /**
      * Transforms prediction values.
      *
      * @param preds prediction
@@ -65,6 +84,18 @@ public class ObjFunction {
 
         double sigmoid(double x) {
             return (1 / (1 + Math.exp(-x)));
+        }
+    }
+
+    /**
+     * Logistic regression.
+     * <p>
+     * Jafama's {@link FastMath#exp(double)} version.
+     * </p>
+     */
+    static class RegLossObjLogistic_Jafama extends RegLossObjLogistic {
+        double sigmoid(double x) {
+            return (1 / (1 + FastMath.exp(-x)));
         }
     }
 
@@ -100,7 +131,7 @@ public class ObjFunction {
 
             double sum = 0;
             for (int i = 0; i < preds.length; i++) {
-                preds[i] = Math.exp(preds[i] - max);
+                preds[i] = exp(preds[i] - max);
                 sum += preds[i];
             }
 
@@ -109,6 +140,23 @@ public class ObjFunction {
             }
 
             return preds;
+        }
+
+        double exp(double x) {
+            return Math.exp(x);
+        }
+    }
+
+    /**
+     * Multiclass classification (predicted probability).
+     * <p>
+     * Jafama's {@link FastMath#exp(double)} version.
+     * </p>
+     */
+    static class SoftmaxMultiClassObjProb_Jafama extends SoftmaxMultiClassObjProb {
+        @Override
+        double exp(double x) {
+            return FastMath.exp(x);
         }
     }
 }

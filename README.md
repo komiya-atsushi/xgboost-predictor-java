@@ -53,6 +53,8 @@ import biz.k11i.xgboost.util.FVec;
 
 public class HowToUseXgboostPredictor {
     public static void main(String[] args) throws java.io.IOException {
+        // If you want to use faster exp() calculation, uncomment the line below
+        // ObjFunction.useFastMathExp(true);
 
         // Load model and create Predictor
         Predictor predictor = new Predictor(
