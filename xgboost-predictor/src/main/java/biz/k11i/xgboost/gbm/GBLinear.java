@@ -33,6 +33,16 @@ public class GBLinear extends GBBase {
         return preds;
     }
 
+    @Override
+    public double predictSingle(FVec feat, int ntree_limit) {
+        if (mparam.num_output_group != 1) {
+            throw new IllegalStateException(
+                    "Can't invoke predictSingle() because this model outputs multiple values: "
+                            + mparam.num_output_group);
+        }
+        return pred(feat, 0);
+    }
+
     double pred(FVec feat, int gid) {
         double psum = bias(gid);
         double featValue;

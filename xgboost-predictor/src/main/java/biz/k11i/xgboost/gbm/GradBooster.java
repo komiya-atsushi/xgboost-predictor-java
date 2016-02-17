@@ -48,6 +48,18 @@ public interface GradBooster {
     double[] predict(FVec feat, int ntree_limit);
 
     /**
+     * Generates a prediction for given feature vector.
+     * <p>
+     * This method only works when the model outputs single value.
+     * </p>
+     *
+     * @param feat        feature vector
+     * @param ntree_limit limit the number of trees used in prediction
+     * @return prediction result
+     */
+    double predictSingle(FVec feat, int ntree_limit);
+
+    /**
      * Predicts the leaf index of each tree. This is only valid in gbtree predictor.
      *
      * @param feat        feature vector

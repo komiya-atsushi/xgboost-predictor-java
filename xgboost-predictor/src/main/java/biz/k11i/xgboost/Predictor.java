@@ -88,6 +88,56 @@ public class Predictor {
     }
 
     /**
+     * Generates a prediction for given feature vector.
+     * <p>
+     * This method only works when the model outputs single value.
+     * </p>
+     *
+     * @param feat feature vector
+     * @return prediction value
+     */
+    public double predictSingle(FVec feat) {
+        return predictSingle(feat, false);
+    }
+
+    /**
+     * Generates a prediction for given feature vector.
+     * <p>
+     * This method only works when the model outputs single value.
+     * </p>
+     *
+     * @param feat          feature vector
+     * @param output_margin whether to only predict margin value instead of transformed prediction
+     * @return prediction value
+     */
+    public double predictSingle(FVec feat, boolean output_margin) {
+        return predictSingle(feat, output_margin, 0);
+    }
+
+    /**
+     * Generates a prediction for given feature vector.
+     * <p>
+     * This method only works when the model outputs single value.
+     * </p>
+     *
+     * @param feat          feature vector
+     * @param output_margin whether to only predict margin value instead of transformed prediction
+     * @param ntree_limit   limit the number of trees used in prediction
+     * @return prediction value
+     */
+    public double predictSingle(FVec feat, boolean output_margin, int ntree_limit) {
+        double pred = predictSingleRaw(feat, ntree_limit);
+        if (!output_margin) {
+            return obj.predTransform(pred);
+        }
+        return pred;
+    }
+
+    double predictSingleRaw(FVec feat, int ntree_limit) {
+        return gbm.predictSingle(feat, ntree_limit) + mparam.base_score;
+    }
+
+    /**
      * Predicts leaf index of each tree.
      *
      * @param feat feature vector

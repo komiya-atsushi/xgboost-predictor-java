@@ -47,6 +47,16 @@ public class GBTree extends GBBase {
         return preds;
     }
 
+    @Override
+    public double predictSingle(FVec feat, int ntree_limit) {
+        if (mparam.num_output_group != 1) {
+            throw new IllegalStateException(
+                    "Can't invoke predictSingle() because this model outputs multiple values: "
+                    + mparam.num_output_group);
+        }
+        return pred(feat, 0, 0, ntree_limit);
+    }
+
     double pred(FVec feat, int bst_group, int root_index, int ntree_limit) {
         int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 

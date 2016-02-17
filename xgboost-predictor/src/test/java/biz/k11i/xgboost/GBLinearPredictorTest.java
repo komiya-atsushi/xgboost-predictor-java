@@ -39,6 +39,16 @@ public class GBLinearPredictorTest extends PredictorTest {
             }
         });
 
+        if (modelName.startsWith("binary-")) {
+            // test predictSingle()
+            verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+                @Override
+                public double[] predict(FVec feat) {
+                    return new double[] {predictor.predictSingle(feat)};
+                }
+            });
+        }
+
         verifyDouble(MODEL_TYPE, modelName, "margin", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {

@@ -71,6 +71,17 @@ public class ObjFunction {
     }
 
     /**
+     * Transforms a prediction value.
+     *
+     * @param pred prediction
+     * @return transformed value
+     */
+    public double predTransform(double pred) {
+        // do nothing
+        return pred;
+    }
+
+    /**
      * Logistic regression.
      */
     static class RegLossObjLogistic extends ObjFunction {
@@ -80,6 +91,11 @@ public class ObjFunction {
                 preds[i] = sigmoid(preds[i]);
             }
             return preds;
+        }
+
+        @Override
+        public double predTransform(double pred) {
+            return sigmoid(pred);
         }
 
         double sigmoid(double x) {
@@ -116,6 +132,11 @@ public class ObjFunction {
 
             return new double[]{maxIndex};
         }
+
+        @Override
+        public double predTransform(double pred) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -140,6 +161,11 @@ public class ObjFunction {
             }
 
             return preds;
+        }
+
+        @Override
+        public double predTransform(double pred) {
+            throw new UnsupportedOperationException();
         }
 
         double exp(double x) {

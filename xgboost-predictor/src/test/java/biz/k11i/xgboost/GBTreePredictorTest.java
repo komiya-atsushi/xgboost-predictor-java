@@ -53,6 +53,16 @@ public class GBTreePredictorTest extends PredictorTest {
             }
         });
 
+        if (modelName.startsWith("binary-")) {
+            // test predictSingle()
+            verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+                @Override
+                public double[] predict(FVec feat) {
+                    return new double[] {predictor.predictSingle(feat)};
+                }
+            });
+        }
+
         verifyInt(MODEL_TYPE, modelName, "leaf", new PredictorFunction<int[]>() {
             @Override
             public int[] predict(FVec feat) {
