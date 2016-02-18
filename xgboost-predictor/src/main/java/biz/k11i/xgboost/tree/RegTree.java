@@ -43,31 +43,28 @@ public class RegTree {
     public int getLeafIndex(FVec feat, int root_id) {
         int pid = root_id;
 
-        while (!nodes[pid].is_leaf()) {
-            int split_index = nodes[pid].split_index();
-            pid = getNext(pid, feat.fvalue(split_index));
+        Node n;
+        while (!(n = nodes[pid])._isLeaf) {
+            pid = n.next(feat);
         }
 
         return pid;
     }
 
-    private int getNext(int pid, double fvalue) {
-        Node node = nodes[pid];
-        if (Double.isNaN(fvalue)) {
-            return nodes[pid].cdefault();
+    /**
+     * Retrieves nodes from root to leaf and returns leaf value.
+     *
+     * @param feat    feature vector
+     * @param root_id starting root index
+     * @return leaf value
+     */
+    public double getLeafValue(FVec feat, int root_id) {
+        Node n = nodes[root_id];
+        while (!n._isLeaf) {
+            n = nodes[n.next(feat)];
         }
 
-        return (fvalue < node.split_cond) ? node.cleft_ : node.cright_;
-    }
-
-    /**
-     * Returns value stored in leaf.
-     *
-     * @param nid leaf index
-     * @return value
-     */
-    public double leafValue(int nid) {
-        return nodes[nid].leaf_value;
+        return n.leaf_value;
     }
 
     /**
@@ -113,8 +110,12 @@ public class RegTree {
         // split feature index, left split or right split depends on the highest bit
         final /* unsigned */ int sindex_;
         // extra info (leaf_value or split_cond)
-        final float leaf_value;
-        final float split_cond;
+        final double leaf_value;
+        final double split_cond;
+
+        private final int _defaultNext;
+        private final int _splitIndex;
+        final boolean _isLeaf;
 
         // set parent
         Node(ModelReader reader) throws IOException {
@@ -130,6 +131,10 @@ public class RegTree {
                 split_cond = reader.readFloat();
                 leaf_value = Float.NaN;
             }
+
+            _defaultNext = cdefault();
+            _splitIndex = split_index();
+            _isLeaf = is_leaf();
         }
 
         boolean is_leaf() {
@@ -146,6 +151,14 @@ public class RegTree {
 
         boolean default_left() {
             return (sindex_ >>> 31) != 0;
+        }
+
+        int next(FVec feat) {
+            double fvalue = feat.fvalue(_splitIndex);
+            if (fvalue != fvalue) {  // is NaN?
+                return _defaultNext;
+            }
+            return (fvalue < split_cond) ? cleft_ : cright_;
         }
     }
 

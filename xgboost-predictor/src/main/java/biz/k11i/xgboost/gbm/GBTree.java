@@ -14,6 +14,8 @@ public class GBTree extends GBBase {
     private RegTree[] trees;
     private int[] tree_info;
 
+    private RegTree[][] _groupTrees;
+
     GBTree() {
         // do nothing
     }
@@ -35,6 +37,25 @@ public class GBTree extends GBBase {
         if (mparam.num_pbuffer != 0 && with_pbuffer) {
             reader.skip(4 * mparam.predBufferSize());
             reader.skip(4 * mparam.predBufferSize());
+        }
+
+        _groupTrees = new RegTree[mparam.num_output_group][];
+        for (int i = 0; i < mparam.num_output_group; i++) {
+            int treeCount = 0;
+            for (int j = 0; j < tree_info.length; j++) {
+                if (tree_info[j] == i) {
+                    treeCount++;
+                }
+            }
+
+            _groupTrees[i] = new RegTree[treeCount];
+            treeCount = 0;
+
+            for (int j = 0; j < tree_info.length; j++) {
+                if (tree_info[j] == i) {
+                    _groupTrees[i][treeCount++] = trees[j];
+                }
+            }
         }
     }
 
@@ -58,18 +79,12 @@ public class GBTree extends GBBase {
     }
 
     double pred(FVec feat, int bst_group, int root_index, int ntree_limit) {
+        RegTree[] trees = _groupTrees[bst_group];
         int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
 
         double psum = 0;
-        for (int i = 0; i < trees.length; i++) {
-            if (tree_info[i] == bst_group) {
-                int tid = trees[i].getLeafIndex(feat, root_index);
-                psum += trees[i].leafValue(tid);
-
-                if (--treeleft <= 0) {
-                    break;
-                }
-            }
+        for (int i = 0; i < treeleft; i++) {
+            psum += trees[i].getLeafValue(feat, root_index);
         }
 
         return psum;
