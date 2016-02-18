@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.1.5
+
+- Support an objective function: `"reg:linear"`
+
 ## 0.1.4
 
 - Improve the speed performance of prediction:

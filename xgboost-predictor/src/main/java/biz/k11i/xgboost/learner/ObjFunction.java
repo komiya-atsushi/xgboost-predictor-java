@@ -16,6 +16,7 @@ public class ObjFunction {
         register("binary:logitraw", new ObjFunction());
         register("multi:softmax", new SoftmaxMultiClassObjClassify());
         register("multi:softprob", new SoftmaxMultiClassObjProb());
+        register("reg:linear", new ObjFunction());
     }
 
     /**
