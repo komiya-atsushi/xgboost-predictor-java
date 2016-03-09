@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.1.6
+
+- Improve the speed performance of prediction:
+    - Optimize tree retrieval performance.
+
 ## 0.1.5
 
 - Support an objective function: `"reg:linear"`
