@@ -1,54 +1,78 @@
 package biz.k11i.xgboost.util;
 
 import java.io.Closeable;
-import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 
 /**
  * Reads the Xgboost model from stream.
  */
 public class ModelReader implements Closeable {
-    private final DataInputStream stream;
-    private byte[] buffer = new byte[8];
+    private final InputStream stream;
+    private byte[] buffer;
 
     @Deprecated
     public ModelReader(String filename) throws IOException {
-        stream = new DataInputStream(new FileInputStream(filename));
+        this(new FileInputStream(filename));
     }
 
     public ModelReader(InputStream in) throws IOException {
-        byte[] type = new byte[4];
-        if (in.read(type) < 4) {
+        stream = in;
+
+        if (fillBuffer(4) < 4) {
             throw new IOException("Cannot read format type (shortage)");
         }
 
-        String typeString = new String(type);
+        String typeString = new String(buffer);
         if (!typeString.equals("binf")) {
-            // TODO support bs64
             throw new IOException("Unsupported format type: " + typeString);
         }
+    }
 
-        stream = new DataInputStream(in);
+    private int fillBuffer(int numBytes) throws IOException {
+        if (buffer == null || buffer.length < numBytes) {
+            buffer = new byte[numBytes];
+        }
+
+        int numBytesRead = 0;
+        while (numBytesRead < numBytes) {
+            int count = stream.read(buffer, numBytesRead, numBytes - numBytesRead);
+            if (count < 0) {
+                return numBytesRead;
+            }
+            numBytesRead += count;
+        }
+
+        return numBytesRead;
     }
 
     public int readInt() throws IOException {
-        int numBytesRead = stream.read(buffer, 0, 4);
+        int numBytesRead = fillBuffer(4);
         if (numBytesRead < 4) {
-            throw new IOException("Cannot read int value (shortage): " + numBytesRead);
+            throw new EOFException("Cannot read int value (shortage): " + numBytesRead);
         }
 
         return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
     }
 
     public int[] readIntArray(int numValues) throws IOException {
-        int[] result = new int[numValues];
+        int numBytesRead = fillBuffer(numValues * 4);
+        if (numBytesRead < numValues * 4) {
+            throw new EOFException(
+                    String.format("Cannot read int array (shortage): expected = %d, actual = %d",
+                            numValues * 4, numBytesRead));
+        }
 
+        ByteBuffer byteBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN);
+
+        int[] result = new int[numValues];
         for (int i = 0; i < numValues; i++) {
-            result[i] = readInt();
+            result[i] = byteBuffer.getInt();
         }
 
         return result;
@@ -64,7 +88,7 @@ public class ModelReader implements Closeable {
     }
 
     public long readLong() throws IOException {
-        int numBytesRead = stream.read(buffer, 0, 8);
+        int numBytesRead = fillBuffer(8);
         if (numBytesRead < 8) {
             throw new IOException("Cannot read long value (shortage): " + numBytesRead);
         }
@@ -73,7 +97,7 @@ public class ModelReader implements Closeable {
     }
 
     public float readFloat() throws IOException {
-        int numBytesRead = stream.read(buffer, 0, 4);
+        int numBytesRead = fillBuffer(4);
         if (numBytesRead < 4) {
             throw new IOException("Cannot read float value (shortage): " + numBytesRead);
         }
@@ -82,10 +106,18 @@ public class ModelReader implements Closeable {
     }
 
     public float[] readFloatArray(int numValues) throws IOException {
-        float[] result = new float[numValues];
+        int numBytesRead = fillBuffer(numValues * 4);
+        if (numBytesRead < numValues * 4) {
+            throw new EOFException(
+                    String.format("Cannot read float array (shortage): expected = %d, actual = %d",
+                            numValues * 4, numBytesRead));
+        }
 
+        ByteBuffer byteBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN);
+
+        float[] result = new float[numValues];
         for (int i = 0; i < numValues; i++) {
-            result[i] = readFloat();
+            result[i] = byteBuffer.getFloat();
         }
 
         return result;
@@ -108,14 +140,12 @@ public class ModelReader implements Closeable {
     }
 
     public String readString(int numBytes) throws IOException {
-        byte[] buffer = new byte[numBytes];
-        int numBytesRead = stream.read(buffer, 0, numBytes);
-
+        int numBytesRead = fillBuffer(numBytes);
         if (numBytesRead < numBytes) {
             throw new IOException(String.format("Cannot read string(%d) (shortage): %d", numBytes, numBytesRead));
         }
 
-        return new String(buffer);
+        return new String(buffer, 0, numBytes, Charset.forName("UTF-8"));
     }
 
     @Override
