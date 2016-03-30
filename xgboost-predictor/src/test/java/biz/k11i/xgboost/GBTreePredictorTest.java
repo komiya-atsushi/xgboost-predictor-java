@@ -4,6 +4,7 @@ import biz.k11i.xgboost.learner.ObjFunction;
 import biz.k11i.xgboost.util.FVec;
 import org.junit.After;
 import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ public class GBTreePredictorTest extends PredictorTest {
 
     private static final String MODEL_TYPE = "gbtree";
 
-    @DataPoints
+    @DataPoints("modelName")
     public static final String[] MODEL_NAMES = {
             "binary-logistic",
             "binary-logitraw",
@@ -23,30 +24,38 @@ public class GBTreePredictorTest extends PredictorTest {
             "multi-softprob",
     };
 
+    @DataPoints("version")
+    public static final String[] VERSIONS = { "40", "47" };
+
     @DataPoints
     public static final boolean[] USE_JAFAMA = { true, false };
 
     @Theory
-    public void testPredict(String modelName, boolean useJafama) throws IOException {
+    public void testPredict(
+            @FromDataPoints("modelName") String modelName,
+            @FromDataPoints("version") String version,
+            boolean useJafama) throws IOException {
+
         ObjFunction.useFastMathExp(useJafama);
 
-        final Predictor predictor = newPredictor("model/" + MODEL_TYPE + "/" + modelName + ".model");
+        String path = "model/" + MODEL_TYPE + "/" + modelNameWithVersion(version, modelName) + ".model";
+        final Predictor predictor = newPredictor(path);
 
-        verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {
                 return predictor.predict(feat);
             }
         });
 
-        verifyDouble(MODEL_TYPE, modelName, "predict_ntree", new PredictorFunction<double[]>() {
+        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict_ntree", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {
                 return predictor.predict(feat, false, 1);
             }
         });
 
-        verifyDouble(MODEL_TYPE, modelName, "margin", new PredictorFunction<double[]>() {
+        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "margin", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {
                 return predictor.predict(feat, true);
@@ -55,7 +64,7 @@ public class GBTreePredictorTest extends PredictorTest {
 
         if (modelName.startsWith("binary-")) {
             // test predictSingle()
-            verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+            verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
                 @Override
                 public double[] predict(FVec feat) {
                     return new double[] {predictor.predictSingle(feat)};
@@ -63,19 +72,23 @@ public class GBTreePredictorTest extends PredictorTest {
             });
         }
 
-        verifyInt(MODEL_TYPE, modelName, "leaf", new PredictorFunction<int[]>() {
+        verifyInt(MODEL_TYPE, modelNameWithVersion(version, modelName), "leaf", new PredictorFunction<int[]>() {
             @Override
             public int[] predict(FVec feat) {
                 return predictor.predictLeaf(feat);
             }
         });
 
-        verifyInt(MODEL_TYPE, modelName, "leaf_ntree", new PredictorFunction<int[]>() {
+        verifyInt(MODEL_TYPE, modelNameWithVersion(version, modelName), "leaf_ntree", new PredictorFunction<int[]>() {
             @Override
             public int[] predict(FVec feat) {
                 return predictor.predictLeaf(feat, 2);
             }
         });
+    }
+
+    private String modelNameWithVersion(String version, String modelName) {
+        return "v" + version + "/" + modelName;
     }
 
     @After
