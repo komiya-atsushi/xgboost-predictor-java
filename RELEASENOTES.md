@@ -1,5 +1,10 @@
 # Release notes
 
+## 0.1.7
+
+- Support latest model file format.
+    - [Commit log of xgboost](https://github.com/dmlc/xgboost/commit/0d95e863c981548b5a7ca363310fc359a9165d85#diff-53a3a623be5ce5a351a89012c7b03a31R193)
+
 ## 0.1.6
 
 - Improve the speed performance of prediction:
