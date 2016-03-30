@@ -175,7 +175,16 @@ public class Predictor {
         final int[] reserved;
 
         ModelParam(ModelReader reader) throws IOException {
-            base_score = reader.readFloat();
+            byte[] first4Bytes = reader.readByteArray(4);
+            if (first4Bytes[0] == 0x62 &&
+                    first4Bytes[1] == 0x69 &&
+                    first4Bytes[2] == 0x6e &&
+                    first4Bytes[3] == 0x66) {
+                // Old model file format has a signature "binf" (62 69 6e 66)
+                base_score = reader.readFloat();
+            } else {
+                base_score = reader.asFloat(first4Bytes);
+            }
             num_feature = reader.readUnsignedInt();
             num_class = reader.readInt();
             saved_with_pbuffer = reader.readInt();

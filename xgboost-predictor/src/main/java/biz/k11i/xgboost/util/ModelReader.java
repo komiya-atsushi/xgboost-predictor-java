@@ -23,15 +23,6 @@ public class ModelReader implements Closeable {
 
     public ModelReader(InputStream in) throws IOException {
         stream = in;
-
-        if (fillBuffer(4) < 4) {
-            throw new IOException("Cannot read format type (shortage)");
-        }
-
-        String typeString = new String(buffer);
-        if (!typeString.equals("binf")) {
-            throw new IOException("Unsupported format type: " + typeString);
-        }
     }
 
     private int fillBuffer(int numBytes) throws IOException {
@@ -49,6 +40,20 @@ public class ModelReader implements Closeable {
         }
 
         return numBytesRead;
+    }
+
+    public byte[] readByteArray(int numBytes) throws IOException {
+        int numBytesRead = fillBuffer(numBytes);
+        if (numBytesRead < numBytes) {
+            throw new EOFException(
+                    String.format("Cannot read byte array (shortage): expected = %d, actual = %d",
+                            numBytes, numBytesRead));
+        }
+
+        byte[] result = new byte[numBytes];
+        System.arraycopy(buffer, 0, result, 0, numBytes);
+
+        return result;
     }
 
     public int readInt() throws IOException {
@@ -94,6 +99,10 @@ public class ModelReader implements Closeable {
         }
 
         return ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getLong();
+    }
+
+    public float asFloat(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
     }
 
     public float readFloat() throws IOException {
