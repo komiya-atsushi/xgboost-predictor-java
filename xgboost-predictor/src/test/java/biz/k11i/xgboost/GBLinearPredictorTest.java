@@ -4,6 +4,7 @@ import biz.k11i.xgboost.learner.ObjFunction;
 import biz.k11i.xgboost.util.FVec;
 import org.junit.After;
 import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ public class GBLinearPredictorTest extends PredictorTest {
 
     private static final String MODEL_TYPE = "gblinear";
 
-    @DataPoints
+    @DataPoints("modelName")
     public static final String[] MODEL_NAMES = {
             "binary-logistic",
             "binary-logitraw",
@@ -23,16 +24,23 @@ public class GBLinearPredictorTest extends PredictorTest {
             "multi-softprob",
     };
 
+    @DataPoints("version")
+    public static final String[] VERSIONS = { "40", "47" };
+
     @DataPoints
     public static final boolean[] USE_JAFAMA = { true, false };
 
     @Theory
-    public void testPredict(String modelName, boolean useJafama) throws IOException {
+    public void testPredict(
+            @FromDataPoints("modelName") String modelName,
+            @FromDataPoints("version") String version,
+            boolean useJafama) throws IOException {
         ObjFunction.useFastMathExp(useJafama);
 
-        final Predictor predictor = newPredictor("model/" + MODEL_TYPE + "/" + modelName + ".model");
+        String path = "model/" + MODEL_TYPE + "/" + modelNameWithVersion(version, modelName) + ".model";
+        final Predictor predictor = newPredictor(path);
 
-        verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {
                 return predictor.predict(feat);
@@ -41,7 +49,7 @@ public class GBLinearPredictorTest extends PredictorTest {
 
         if (modelName.startsWith("binary-")) {
             // test predictSingle()
-            verifyDouble(MODEL_TYPE, modelName, "predict", new PredictorFunction<double[]>() {
+            verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
                 @Override
                 public double[] predict(FVec feat) {
                     return new double[] {predictor.predictSingle(feat)};
@@ -49,7 +57,7 @@ public class GBLinearPredictorTest extends PredictorTest {
             });
         }
 
-        verifyDouble(MODEL_TYPE, modelName, "margin", new PredictorFunction<double[]>() {
+        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "margin", new PredictorFunction<double[]>() {
             @Override
             public double[] predict(FVec feat) {
                 return predictor.predict(feat, true);

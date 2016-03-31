@@ -87,10 +87,6 @@ public class GBTreePredictorTest extends PredictorTest {
         });
     }
 
-    private String modelNameWithVersion(String version, String modelName) {
-        return "v" + version + "/" + modelName;
-    }
-
     @After
     public void tearDown() {
         ObjFunction.useFastMathExp(false);

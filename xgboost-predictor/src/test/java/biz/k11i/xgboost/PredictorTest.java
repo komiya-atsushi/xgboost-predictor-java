@@ -81,6 +81,10 @@ public abstract class PredictorTest {
         }
     }
 
+    String modelNameWithVersion(String version, String modelName) {
+        return "v" + version + "/" + modelName;
+    }
+
     interface PredictorFunction<T> {
         T predict(FVec feat);
     }
