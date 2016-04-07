@@ -1,20 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
-plugins {
-    id 'maven'
-    id 'maven-publish'
-    id 'net.researchgate.release' version '2.3.1'
-    id 'com.jfrog.bintray' version '1.4'
-}
-
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile group: 'net.jafama', name: 'jafama', version: '2.1.0'
 
@@ -23,57 +6,3 @@ dependencies {
     }
     testCompile group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
 }
-
-javadoc {
-    options.locale = 'en_US'
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
-bintray {
-    user = project.hasProperty('bintrayUser') ? bintrayUser : ''
-    key = project.hasProperty('bintrayKey') ? bintrayKey : ''
-    publications = ['maven']
-
-    pkg {
-        repo = 'maven'
-        name = 'xgboost-predictor'
-        userOrg = 'komiya-atsushi'
-        licenses = ['Apache-2.0']
-
-        websiteUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java'
-        issueTrackerUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java/issues'
-        vcsUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java.git'
-
-        version {
-            name = project.version
-            desc = 'Pure Java implementation of Xgboost predictor for online prediction tasks.'
-        }
-    }
-}
-
-createReleaseTag.dependsOn bintrayUpload

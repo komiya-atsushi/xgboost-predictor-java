@@ -1,11 +1,88 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'net.researchgate:gradle-release:2.3.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+
 subprojects {
     repositories {
         jcenter()
     }
 
     apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'net.researchgate.release'
+    apply plugin: 'com.jfrog.bintray'
+
     group 'biz.k11i'
 
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    compileJava {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+
+    compileTestJava {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+
+    javadoc {
+        options.locale = 'en_US'
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives jar
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+            }
+        }
+    }
+
+    bintray {
+        user = project.hasProperty('bintrayUser') ? bintrayUser : ''
+        key = project.hasProperty('bintrayKey') ? bintrayKey : ''
+        publications = ['maven']
+
+        pkg {
+            repo = 'maven'
+            name = project.name
+            userOrg = 'komiya-atsushi'
+            licenses = ['Apache-2.0']
+
+            websiteUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java'
+            issueTrackerUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java/issues'
+            vcsUrl = 'https://github.com/komiya-atsushi/xgboost-predictor-java.git'
+
+            version {
+                name = project.version
+                desc = "Pure Java implementation of Xgboost predictor for online prediction tasks: Module ${project.name}"
+            }
+        }
+    }
+
+    createReleaseTag.dependsOn bintrayUpload
 }
