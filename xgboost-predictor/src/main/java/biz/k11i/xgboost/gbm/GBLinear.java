@@ -4,6 +4,7 @@ import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Linear booster implementation
@@ -68,7 +69,7 @@ public class GBLinear extends GBBase {
         return weights[(mparam.num_feature * mparam.num_output_group) + gid];
     }
 
-    static class ModelParam {
+    static class ModelParam implements Serializable {
         /*! \brief number of features */
         final int num_feature;
         /*!

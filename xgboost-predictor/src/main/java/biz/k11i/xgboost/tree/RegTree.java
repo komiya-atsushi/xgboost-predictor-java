@@ -4,11 +4,12 @@ import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Regression tree.
  */
-public class RegTree {
+public class RegTree implements Serializable {
     private Param param;
     private Node[] nodes;
     private RTreeNodeStat[] stats;
@@ -70,7 +71,7 @@ public class RegTree {
     /**
      * Parameters.
      */
-    static class Param {
+    static class Param implements Serializable {
         /*! \brief number of start root */
         final int num_roots;
         /*! \brief total number of nodes */
@@ -101,7 +102,7 @@ public class RegTree {
         }
     }
 
-    static class Node {
+    static class Node implements Serializable {
         // pointer to parent, highest bit is used to
         // indicate whether it's a left child or not
         final int parent_;
@@ -165,7 +166,7 @@ public class RegTree {
     /**
      * Statistics each node in tree.
      */
-    static class RTreeNodeStat {
+    static class RTreeNodeStat implements Serializable {
         /*! \brief loss chg caused by current split */
         final float loss_chg;
         /*! \brief sum of hessian values, used to measure coverage of data */

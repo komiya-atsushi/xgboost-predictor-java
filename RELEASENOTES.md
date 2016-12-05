@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.1.8
+
+- Make `Predictor` Spark-friendly (implement `Serializable` interface, [#11](https://github.com/komiya-atsushi/xgboost-predictor-java/issues/11) )
+
 ## 0.1.7
 
 - Support latest model file format.

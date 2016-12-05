@@ -2,13 +2,14 @@ package biz.k11i.xgboost.learner;
 
 import net.jafama.FastMath;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Objective function implementations.
  */
-public class ObjFunction {
+public class ObjFunction implements Serializable {
     private static final Map<String, ObjFunction> FUNCTIONS = new HashMap<>();
 
     static {

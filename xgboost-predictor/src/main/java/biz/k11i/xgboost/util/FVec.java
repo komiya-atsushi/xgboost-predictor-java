@@ -1,11 +1,12 @@
 package biz.k11i.xgboost.util;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Interface of feature vector.
  */
-public interface FVec {
+public interface FVec extends Serializable {
     /**
      * Gets index-th value.
      *

@@ -5,6 +5,7 @@ import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Gradient boosted tree implementation.
@@ -107,7 +108,7 @@ public class GBTree extends GBBase {
     }
 
 
-    static class ModelParam {
+    static class ModelParam implements Serializable {
         /*! \brief number of trees */
         final int num_trees;
         /*! \brief number of root: default 0, means single tree */

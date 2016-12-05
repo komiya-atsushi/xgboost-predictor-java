@@ -7,11 +7,12 @@ import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Predicts using the Xgboost model.
  */
-public class Predictor {
+public class Predictor implements Serializable {
     private ModelParam mparam;
     private String name_obj;
     private String name_gbm;
@@ -162,7 +163,7 @@ public class Predictor {
     /**
      * Parameters.
      */
-    static class ModelParam {
+    static class ModelParam implements Serializable {
         /* \brief global bias */
         final float base_score;
         /* \brief number of features  */

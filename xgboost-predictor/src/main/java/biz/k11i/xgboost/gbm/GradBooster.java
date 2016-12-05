@@ -4,11 +4,12 @@ import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Interface of gradient boosting model.
  */
-public interface GradBooster {
+public interface GradBooster extends Serializable {
     class Factory {
         /**
          * Creates a gradient booster from given name.
