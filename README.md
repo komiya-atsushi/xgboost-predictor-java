@@ -19,7 +19,7 @@ If you use **Maven**:
     <id>bintray-komiya-atsushi-maven</id>
     <url>http://dl.bintray.com/komiya-atsushi/maven</url>
   </repository>
-</repository>
+</repositories>
 
 <dependencies>
   <dependency>
