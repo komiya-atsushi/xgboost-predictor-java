@@ -226,6 +226,15 @@ public class Predictor implements Serializable {
     }
 
     /**
+     * Returns number of class.
+     *
+     * @return number of class
+     */
+    public int getNumClass() {
+        return mparam.num_class;
+    }
+
+    /**
      * Parameters.
      */
     static class ModelParam implements Serializable {

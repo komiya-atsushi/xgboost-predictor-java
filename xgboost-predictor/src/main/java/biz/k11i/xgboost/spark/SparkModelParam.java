@@ -11,6 +11,7 @@ public class SparkModelParam implements Serializable {
 
     final String modelType;
     final String featureCol;
+
     final String labelCol;
     final String predictionCol;
 
@@ -36,5 +37,29 @@ public class SparkModelParam implements Serializable {
         } else {
             throw new UnsupportedOperationException("Unknown modelType: " + modelType);
         }
+    }
+
+    public String getModelType() {
+        return modelType;
+    }
+
+    public String getFeatureCol() {
+        return featureCol;
+    }
+
+    public String getLabelCol() {
+        return labelCol;
+    }
+
+    public String getPredictionCol() {
+        return predictionCol;
+    }
+
+    public String getRawPredictionCol() {
+        return rawPredictionCol;
+    }
+
+    public double[] getThresholds() {
+        return thresholds;
     }
 }

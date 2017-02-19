@@ -1,0 +1,18 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile project(':xgboost-predictor')
+
+    compileOnly group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    compileOnly group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion
+
+    testCompile group: 'org.scalatest', name: "scalatest${scalaSuffix}", version: '3.0.1'
+    testCompile group: 'com.holdenkarau', name: "spark-testing-base${scalaSuffix}", version: "${sparkVersion}_0.6.0"
+    testCompile group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion
+    testCompile group: 'org.apache.spark', name: "spark-hive${scalaSuffix}", version: sparkVersion
+}
+
+test {
+    maxHeapSize = "2g"
+    jvmArgs '-XX:MaxPermSize=512m'
+}

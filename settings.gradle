@@ -1,3 +1,16 @@
 rootProject.name = 'xgboost-predictor-java'
+
+apply plugin: 'scala-cross-build'
+
+scalaCrossBuild {
+    defaultScalaVersion '2.10.6'
+    targetScalaVersions '2.10.6', '2.11.8'
+    buildDefaultOnly false
+
+    projectsToCrossBuild(
+            'xgboost-predictor-spark'
+    )
+}
+
 include 'xgboost-predictor'
 include 'xgboost-predictor-examples'

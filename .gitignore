@@ -5,3 +5,6 @@ build/
 # IntelliJ IDEA
 .idea/
 *.iml
+
+# Spark
+derby.log
