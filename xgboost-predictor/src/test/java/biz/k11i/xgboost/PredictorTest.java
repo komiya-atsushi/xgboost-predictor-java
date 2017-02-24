@@ -17,22 +17,29 @@ import static org.hamcrest.Matchers.is;
 
 public abstract class PredictorTest {
 
-    private static final List<FVec> TEST_DATA;
+    private static final List<FVec> TEST_DATA_AGARICUS;
 
     static {
         try {
-            TEST_DATA = loadTestData();
+            // zero-based test data
+            TEST_DATA_AGARICUS = loadTestData("data/agaricus.txt.test.0");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    static List<FVec> loadTestData() throws IOException {
-        try (InputStream stream = PredictorTest.class.getResourceAsStream("model/agaricus.txt.test");
+    static List<FVec> loadTestData(String path) throws IOException {
+        return loadTestData(path, false);
+    }
+
+    static List<FVec> loadTestData(String path, boolean oneBasedIndex) throws IOException {
+        try (InputStream stream = PredictorTest.class.getResourceAsStream(path);
              InputStreamReader isr = new InputStreamReader(stream);
              BufferedReader reader = new BufferedReader(isr)) {
 
             List<FVec> result = new ArrayList<>();
+            int origin = oneBasedIndex ? 1 : 0;
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -44,7 +51,7 @@ public abstract class PredictorTest {
                     }
 
                     String[] pair = val.split(":");
-                    feat.put(Integer.parseInt(pair[0]), Float.parseFloat(pair[1]));
+                    feat.put(Integer.parseInt(pair[0]) - origin, Float.parseFloat(pair[1]));
                 }
 
                 result.add(FVec.Transformer.fromMap(feat));
@@ -89,11 +96,19 @@ public abstract class PredictorTest {
         T predict(FVec feat);
     }
 
+    interface PredictorFunction2<T> {
+        T predict(Predictor predictor, FVec feat);
+    }
+
     void verifyDouble(String modelType, String modelName, String ext, PredictorFunction<double[]> function) throws IOException {
+        verifyDouble(TEST_DATA_AGARICUS, modelType, modelName, ext, function);
+    }
+
+    void verifyDouble(List<FVec> testData, String modelType, String modelName, String ext, PredictorFunction<double[]> function) throws IOException {
         List<double[]> expected = loadExpectedData(String.format("model/%s/%s.%s", modelType, modelName, ext));
 
-        for (int i = 0; i < TEST_DATA.size(); i++) {
-            double[] predicted = function.predict(TEST_DATA.get(i));
+        for (int i = 0; i < testData.size(); i++) {
+            double[] predicted = function.predict(testData.get(i));
 
             assertThat(
                     String.format("[%s.%s: %d] length", modelName, ext, i),
@@ -109,10 +124,14 @@ public abstract class PredictorTest {
     }
 
     void verifyInt(String modelType, String modelName, String ext, PredictorFunction<int[]> function) throws IOException {
+        verifyInt(TEST_DATA_AGARICUS, modelType, modelName, ext, function);
+    }
+
+    void verifyInt(List<FVec> testData, String modelType, String modelName, String ext, PredictorFunction<int[]> function) throws IOException {
         List<double[]> expected = loadExpectedData(String.format("model/%s/%s.%s", modelType, modelName, ext));
 
-        for (int i = 0; i < TEST_DATA.size(); i++) {
-            int[] predicted = function.predict(TEST_DATA.get(i));
+        for (int i = 0; i < testData.size(); i++) {
+            int[] predicted = function.predict(testData.get(i));
 
             assertThat(
                     String.format("[%s.%s: %d] length", modelName, ext, i),
@@ -123,6 +142,35 @@ public abstract class PredictorTest {
                 assertThat(
                         String.format("[%s.%s: %d] value[%d]", modelName, ext, i, j),
                         predicted[j], is((int) expected.get(i)[j]));
+            }
+        }
+    }
+
+    void verifyDouble(
+            String modelName,
+            String testDataName,
+            String expectedDataName,
+            String predictionTaskName,
+            PredictorFunction2<double[]> function) throws IOException {
+
+        Predictor predictor = newPredictor(modelName);
+        List<FVec> testData = loadTestData(testDataName, true);
+        List<double[]> expectedData = loadExpectedData(expectedDataName);
+
+        for (int i = 0; i < testData.size(); i++) {
+            double[] predicted = function.predict(predictor, testData.get(i));
+
+            assertThat(
+                    String.format("[model: %s, test: %s, expected: %s, task: %s] #%d",
+                            modelName, testDataName, expectedDataName, predictionTaskName, i),
+                    predicted.length,
+                    is(expectedData.get(i).length));
+
+            for (int j = 0; j < predicted.length; j++) {
+                assertThat(
+                        String.format("[model: %s, test: %s, expected: %s, task: %s] #%d[%d]",
+                                modelName, testDataName, expectedDataName, predictionTaskName, i, j),
+                        predicted[j], closeTo(expectedData.get(i)[j], 1e-5));
             }
         }
     }
