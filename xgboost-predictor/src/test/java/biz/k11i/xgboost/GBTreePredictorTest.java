@@ -1,18 +1,13 @@
 package biz.k11i.xgboost;
 
 import biz.k11i.xgboost.learner.ObjFunction;
-import biz.k11i.xgboost.util.FVec;
 import org.junit.After;
 import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
 @RunWith(Theories.class)
-public class GBTreePredictorTest extends PredictorTest {
+public class GBTreePredictorTest extends GBPredictorTestBase {
 
     private static final String MODEL_TYPE = "gbtree";
 
@@ -25,66 +20,23 @@ public class GBTreePredictorTest extends PredictorTest {
     };
 
     @DataPoints("version")
-    public static final String[] VERSIONS = { "40", "47" };
+    public static final String[] VERSIONS = {"40", "47"};
 
     @DataPoints
-    public static final boolean[] USE_JAFAMA = { true, false };
+    public static final boolean[] USE_JAFAMA = {true, false};
 
-    @Theory
-    public void testPredict(
-            @FromDataPoints("modelName") String modelName,
-            @FromDataPoints("version") String version,
-            boolean useJafama) throws IOException {
+    @DataPoints
+    public static final PredictionTask[] TASKS = {
+            PredictionTask.predict(),
+            PredictionTask.predictWithNTreeLimit(1),
+            PredictionTask.predictMargin(),
+            PredictionTask.predictLeaf(),
+            PredictionTask.predictLeafWithNTree(2)
+    };
 
-        ObjFunction.useFastMathExp(useJafama);
-
-        String path = "model/" + MODEL_TYPE + "/" + modelNameWithVersion(version, modelName) + ".model";
-        final Predictor predictor = newPredictor(path);
-
-        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat);
-            }
-        });
-
-        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict_ntree", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat, false, 1);
-            }
-        });
-
-        verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "margin", new PredictorFunction<double[]>() {
-            @Override
-            public double[] predict(FVec feat) {
-                return predictor.predict(feat, true);
-            }
-        });
-
-        if (modelName.startsWith("binary-")) {
-            // test predictSingle()
-            verifyDouble(MODEL_TYPE, modelNameWithVersion(version, modelName), "predict", new PredictorFunction<double[]>() {
-                @Override
-                public double[] predict(FVec feat) {
-                    return new double[] {predictor.predictSingle(feat)};
-                }
-            });
-        }
-
-        verifyInt(MODEL_TYPE, modelNameWithVersion(version, modelName), "leaf", new PredictorFunction<int[]>() {
-            @Override
-            public int[] predict(FVec feat) {
-                return predictor.predictLeaf(feat);
-            }
-        });
-
-        verifyInt(MODEL_TYPE, modelNameWithVersion(version, modelName), "leaf_ntree", new PredictorFunction<int[]>() {
-            @Override
-            public int[] predict(FVec feat) {
-                return predictor.predictLeaf(feat, 2);
-            }
-        });
+    @Override
+    String getModelType() {
+        return MODEL_TYPE;
     }
 
     @After

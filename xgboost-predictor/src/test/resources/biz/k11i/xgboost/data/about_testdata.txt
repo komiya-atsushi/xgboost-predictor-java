@@ -1,0 +1,30 @@
+We use these data set from UCI machine learning repository (https://archive.ics.uci.edu/ml/datasets/)
+for validation/testing purpose.
+
+
+# Mushroom data set
+
+Origin:
+Mushroom records drawn from The Audubon Society Field Guide to North American Mushrooms (1981). G. H. Lincoff (Pres.), New York: Alfred A. Knopf
+
+Donor:
+Jeff Schlimmer
+
+
+# Iris data set
+
+Creator:
+R.A. Fisher
+
+Donor:
+Michael Marshall
+
+
+# Housing data set
+
+Origin:
+This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University.
+
+Creator:
+Harrison, D. and Rubinfeld, D.L.
+'Hedonic prices and the demand for clean air', J. Environ. Economics & Management, vol.5, 81-102, 1978.
