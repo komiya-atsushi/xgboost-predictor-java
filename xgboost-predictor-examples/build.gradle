@@ -3,5 +3,5 @@ repositories {
 }
 
 dependencies {
-    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.1.0'
+    compile project(':xgboost-predictor')
 }

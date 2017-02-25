@@ -34,7 +34,7 @@ public class PredictionUsingSparkModelTest extends PredictionTestBase {
 
     @DataPoints
     public static final TestDataSet[] dataPoints = {
-            new TestDataSet("agaricus", "agaricus.txt.test.1"),
+            new TestDataSet("agaricus", "agaricus.txt.1.test"),
             new TestDataSet("iris", "iris.test"),
             new TestDataSet("housing", "housing.test"),
     };

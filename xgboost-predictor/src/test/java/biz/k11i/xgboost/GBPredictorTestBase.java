@@ -25,7 +25,7 @@ public abstract class GBPredictorTestBase extends PredictionTestBase {
         }
 
         TestData testData() {
-            return TestData.zeroBasedIndex("data/agaricus.txt.test.0");
+            return TestData.zeroBasedIndex("data/agaricus.txt.0.test");
         }
 
         ExpectedData expectedData(String taskName) {
