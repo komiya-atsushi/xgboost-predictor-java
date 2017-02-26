@@ -52,6 +52,11 @@ subprojects {
         archives javadocJar
     }
 
+    release {
+        preTagCommitMessage = '[skip ci] [Gradle Release Plugin] - pre tag commit: '
+        newVersionCommitMessage = '[skip ci] [Gradle Release Plugin] - new version commit: '
+    }
+
     publishing {
         publications {
             maven(MavenPublication) {
@@ -90,7 +95,7 @@ subprojects {
         if (!JavaVersion.current().isJava7()) {
             String message = "ERROR: Java 7 required but " +
                     JavaVersion.current() +
-                    " found. Change your JAVA_HOME environment variable.";
+                    " found. Change your JAVA_HOME environment variable."
             throw new IllegalStateException(message)
         }
     }
