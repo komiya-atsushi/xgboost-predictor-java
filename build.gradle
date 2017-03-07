@@ -76,6 +76,7 @@ subprojects {
         pkg {
             repo = 'maven'
             name = project.name
+            desc = project.description
             userOrg = 'komiya-atsushi'
             licenses = ['Apache-2.0']
 
@@ -85,12 +86,11 @@ subprojects {
 
             version {
                 name = project.version
-                desc = "Pure Java implementation of Xgboost predictor for online prediction tasks: Module ${project.name}"
             }
         }
     }
 
-//    createReleaseTag.dependsOn bintrayUpload
+    createReleaseTag.dependsOn bintrayUpload
 
     task checkJavaVersion << {
         if (!JavaVersion.current().isJava7()) {

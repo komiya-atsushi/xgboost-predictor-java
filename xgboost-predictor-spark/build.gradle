@@ -1,7 +1,9 @@
 apply plugin: 'scala'
 
+description = "Apache Spark integration of xgboost-predictor"
+
 dependencies {
-    compile project(':xgboost-predictor')
+    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.2.0'
 
     compileOnly group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
     compileOnly group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion

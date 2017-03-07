@@ -1,3 +1,5 @@
+description = "Pure Java implementation of XGBoost predictor for online prediction tasks"
+
 dependencies {
     compile group: 'net.jafama', name: 'jafama', version: '2.1.0'
 
