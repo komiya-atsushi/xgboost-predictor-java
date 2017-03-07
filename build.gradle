@@ -55,6 +55,7 @@ subprojects {
     release {
         preTagCommitMessage = '[skip ci] [Gradle Release Plugin] - pre tag commit: '
         newVersionCommitMessage = '[skip ci] [Gradle Release Plugin] - new version commit: '
+        tagTemplate = '$name-$version'
     }
 
     publishing {
@@ -89,7 +90,7 @@ subprojects {
         }
     }
 
-    createReleaseTag.dependsOn bintrayUpload
+//    createReleaseTag.dependsOn bintrayUpload
 
     task checkJavaVersion << {
         if (!JavaVersion.current().isJava7()) {
