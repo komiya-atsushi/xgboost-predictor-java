@@ -25,7 +25,7 @@ If you use **Maven**:
   <dependency>
     <groupId>biz.k11i</groupId>
     <artifactId>xgboost-predictor</artifactId>
-    <version>0.1.7</version>
+    <version>0.2.0</version>
   </dependency>
 </dependencies>
 ```
@@ -39,9 +39,20 @@ repositories {
 }
 
 dependencies {
-    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.1.7'
+    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.2.0'
 }
 ```
+
+Or **sbt**:
+
+```scala
+resolvers += Resolver.jcenterRepo
+
+libraryDependencies ++= Seq(
+  "biz.k11i" % "xgboost-predictor" % "0.2.0"
+)
+```
+
 
 ## Using Predictor in Java
 
@@ -88,6 +99,11 @@ public class HowToUseXgboostPredictor {
     }
 }
 ```
+
+
+## Apache Spark integration
+
+See detail [xgboost-predictor-spark](https://github.com/komiya-atsushi/xgboost-predictor-java/tree/master/xgboost-predictor-spark).
 
 
 # Benchmark

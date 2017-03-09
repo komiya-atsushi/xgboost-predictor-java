@@ -1,5 +1,11 @@
 # Release notes
 
+## 0.2.0
+
+- Support XGBoost4J-Spark-generated model file format.
+- Introduce [xgboost-predictor-spark](https://github.com/komiya-atsushi/xgboost-predictor-java/tree/master/xgboost-predictor-spark).
+
+
 ## 0.1.8
 
 - Make `Predictor` Spark-friendly (implement `Serializable` interface, [#11](https://github.com/komiya-atsushi/xgboost-predictor-java/issues/11) )
