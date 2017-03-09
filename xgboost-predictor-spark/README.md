@@ -23,12 +23,12 @@ Apache Spark integration of [xgboost-predictor](https://github.com/komiya-atsush
 ## Add dependencies to build.sbt
 
 ```scala
-// Add Bintray JCenter repository
-resolvers += Resolver.jcenterRepo
+// Add Bintray repository
+resolvers += Resolver.bintrayRepo("komiya-atsushi", "maven")
 
 libraryDependencies ++= Seq(
   // xgboost-predictor-spark requires Apache Spark version 2.0.0 or higher
-  "org.apache.spark" %% "spark-mllib"             % "2.0.2",
+  "org.apache.spark" %% "spark-mllib"             % "2.0.2" % "provided",
   "biz.k11i"         %% "xgboost-predictor-spark" % "0.2.0"
 )
 ```
@@ -69,6 +69,8 @@ object XGBoostPredictorSparkExample {
   }
 }
 ```
+
+See also [xgboost-predictor-examples](https://github.com/komiya-atsushi/xgboost-predictor-java/tree/master/xgboost-predictor-examples/src/main/scala/biz/k11i/xgboost/spark/demo).
 
 
 # API
