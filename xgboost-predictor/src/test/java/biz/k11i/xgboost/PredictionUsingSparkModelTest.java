@@ -23,12 +23,12 @@ public class PredictionUsingSparkModelTest extends PredictionTestBase {
             return new PredictionModel("model/gbtree/spark/" + name + ".model.spark");
         }
 
-        TestData testData() {
-            return TestData.oneBasedIndex("data/" + testDataName);
+        TestHelper.TestData testData() {
+            return TestHelper.newTestDataOfOneBasedIndex("data/" + testDataName);
         }
 
-        ExpectedData expectedData() {
-            return new ExpectedData("expected/gbtree/spark/" + name + ".predict");
+        TestHelper.Expectation expectedData() {
+            return TestHelper.newExpectation("expectation/gbtree/spark/" + name + ".predict");
         }
     }
 

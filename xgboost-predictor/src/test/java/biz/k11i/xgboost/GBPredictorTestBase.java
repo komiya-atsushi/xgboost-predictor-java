@@ -24,13 +24,13 @@ public abstract class GBPredictorTestBase extends PredictionTestBase {
             return new PredictionModel(path);
         }
 
-        TestData testData() {
-            return TestData.zeroBasedIndex("data/agaricus.txt.0.test");
+        TestHelper.TestData testData() {
+            return TestHelper.newTestDataOfZeroBasedIndex("data/agaricus.txt.0.test");
         }
 
-        ExpectedData expectedData(String taskName) {
-            String path = String.format("model/%s/v%s/%s.%s", modelType, modelVersion, modelName, taskName);
-            return new ExpectedData(path);
+        TestHelper.Expectation expectedData(String taskName) {
+            String path = String.format("expectation/%s/v%s/%s.%s", modelType, modelVersion, modelName, taskName);
+            return TestHelper.newExpectation(path);
         }
     }
 

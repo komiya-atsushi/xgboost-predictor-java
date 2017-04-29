@@ -3,6 +3,7 @@ description = "Pure Java implementation of XGBoost predictor for online predicti
 dependencies {
     compile group: 'net.jafama', name: 'jafama', version: '2.1.0'
 
+    testCompile project(':xgboost-predictor-test')
     testCompile(group: 'junit', name: 'junit', version: '4.12') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }

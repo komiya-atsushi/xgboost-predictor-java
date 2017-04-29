@@ -11,7 +11,7 @@ public class ModelLoadingTest {
 
     @Test
     public void testBuffered() throws IOException {
-        try (InputStream is = ModelLoadingTest.class.getResourceAsStream(MODEL_PATH);
+        try (InputStream is = TestHelper.getResourceAsStream(MODEL_PATH);
              BufferedInputStream in = new BufferedInputStream(is)) {
             new Predictor(in);
         }
@@ -19,7 +19,7 @@ public class ModelLoadingTest {
 
     @Test
     public void testLazy() throws IOException {
-        try (InputStream is = ModelLoadingTest.class.getResourceAsStream(MODEL_PATH);
+        try (InputStream is = TestHelper.getResourceAsStream(MODEL_PATH);
              LazyInputStream in = new LazyInputStream(is)) {
             new Predictor(in);
         }
