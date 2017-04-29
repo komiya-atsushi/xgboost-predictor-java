@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.github.maiflai:gradle-scalatest:0.15'
+    }
+}
+
 apply plugin: 'scala'
+apply plugin: 'com.github.maiflai.scalatest'
 
 description = "Apache Spark integration of xgboost-predictor"
 
@@ -12,9 +24,12 @@ dependencies {
     testCompile group: 'com.holdenkarau', name: "spark-testing-base${scalaSuffix}", version: "${sparkVersion}_0.6.0"
     testCompile group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion
     testCompile group: 'org.apache.spark', name: "spark-hive${scalaSuffix}", version: sparkVersion
+
+    testRuntime group: 'org.pegdown', name: 'pegdown', version: '1.4.2'
 }
 
 test {
+    maxParallelForks = 1
     maxHeapSize = "2g"
     jvmArgs '-XX:MaxPermSize=512m'
 }
