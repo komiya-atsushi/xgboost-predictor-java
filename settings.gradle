@@ -14,3 +14,5 @@ scalaCrossBuild {
 
 include 'xgboost-predictor'
 include 'xgboost-predictor-examples'
+include 'xgboost-predictor-test'
+
