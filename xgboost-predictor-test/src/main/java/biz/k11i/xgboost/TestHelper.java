@@ -7,13 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class TestHelper {
+    private static AtomicLong sequence = new AtomicLong();
+
     public static String getResourcePath(String name) {
         URL url = TestHelper.class.getResource(name);
         if (url == null) {
@@ -36,6 +42,17 @@ public class TestHelper {
         }
 
         return result;
+    }
+
+    public static Path getResourceAsTemporaryFile(String name) {
+        try (InputStream in = getResourceAsStream(name)) {
+            Path tempFile = Files.createTempFile("xgboost-predictor-test-" + sequence.incrementAndGet() + "-", ".tmp");
+            Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            return tempFile;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot create temporary file", e);
+        }
     }
 
     public static TestData newTestDataOfOneBasedIndex(String name) {

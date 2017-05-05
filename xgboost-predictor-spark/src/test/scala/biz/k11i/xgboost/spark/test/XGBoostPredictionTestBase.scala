@@ -2,39 +2,40 @@ package biz.k11i.xgboost.spark.test
 
 import java.net.URL
 
+import biz.k11i.xgboost.TemporaryFileResource
 import com.holdenkarau.spark.testing.DatasetSuiteBase
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
-import org.scalatest.{Matchers, Suite}
+import org.scalatest.{BeforeAndAfter, Matchers, Suite}
 
 
 trait XGBoostPredictionTestBase
   extends DatasetSuiteBase
-    with Matchers {
+    with Matchers
+    with BeforeAndAfter {
   self: Suite =>
 
+  val tempFileResource = new TemporaryFileResource
+
+  after {
+    tempFileResource.close()
+  }
+
   def getResourcePath(name: String): String = {
-    getClass.getResource(name) match {
-      case null => throw new Exception(s"Resource '$name' does not exist")
-      case url: URL => url.getPath
-    }
+    tempFileResource.getAsPath(name).toString
   }
 
-  def toResourceName(resourceType: String, name: String): String = {
-    getResourcePath(s"/biz/k11i/xgboost/spark/$resourceType/$name")
-  }
-
-  def modelPath(name: String): String = toResourceName("model", name)
+  def modelPath(name: String): String = getResourcePath(s"model/gbtree/spark/$name")
 
   def loadTestData(name: String, denseVector: Boolean = false): DataFrame = {
     sqlContext.read.format("libsvm")
       .option("vectorType", if (denseVector) "dense" else "sparse")
-      .load(toResourceName("data", name))
+      .load(getResourcePath(s"data/$name"))
   }
 
   def loadExpectedData(name: String): DataFrame = {
-    sqlContext.read.parquet(toResourceName("expected", name))
+    sqlContext.read.parquet(getResourcePath(s"expectation/gbtree/spark/df/$name"))
   }
 
   def sizeOfVector(df: DataFrame, colName: String): Int = {

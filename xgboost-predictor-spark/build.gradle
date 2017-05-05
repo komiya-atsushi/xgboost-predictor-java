@@ -20,6 +20,7 @@ dependencies {
     compileOnly group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
     compileOnly group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion
 
+    testCompile project(':xgboost-predictor-test')
     testCompile group: 'org.scalatest', name: "scalatest${scalaSuffix}", version: '3.0.1'
     testCompile group: 'com.holdenkarau', name: "spark-testing-base${scalaSuffix}", version: "${sparkVersion}_0.6.0"
     testCompile group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion

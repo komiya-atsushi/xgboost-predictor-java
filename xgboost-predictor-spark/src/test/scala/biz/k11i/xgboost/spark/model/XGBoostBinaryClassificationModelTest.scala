@@ -10,7 +10,7 @@ class XGBoostBinaryClassificationModelTest
 
   test("Classification using libxgboost-compatible model") {
     val model = XGBoostBinaryClassification.load(modelPath("agaricus.model"))
-    val testDF = loadTestData("agaricus.txt.test")
+    val testDF = loadTestData("agaricus.txt.1.test")
     val predDF = model.transform(testDF)
 
     predDF.columns should contain allOf("rawPrediction", "probability", "prediction")
@@ -29,7 +29,7 @@ class XGBoostBinaryClassificationModelTest
 
   test("Classification using xgboost4j-spark-compatible model") {
     val model = XGBoostBinaryClassification.load(modelPath("agaricus.model.spark"))
-    val testDF = loadTestData("agaricus.txt.test")
+    val testDF = loadTestData("agaricus.txt.1.test")
     val predDF = model.transform(testDF)
 
     predDF.columns should contain allOf("probabilities", "probability", "prediction")
@@ -48,7 +48,7 @@ class XGBoostBinaryClassificationModelTest
 
   test("Leaves prediction using xgboost4j-spark-compatible model") {
     val model = XGBoostBinaryClassification.load(modelPath("agaricus.model.spark"))
-    val testDF = loadTestData("agaricus.txt.test")
+    val testDF = loadTestData("agaricus.txt.1.test")
     val predDF = model
       .setPredictLeaves(true)
       .transform(testDF)
