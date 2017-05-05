@@ -1,5 +1,6 @@
 package biz.k11i.xgboost.spark.demo
 
+import biz.k11i.xgboost.TemporaryFileResource
 import biz.k11i.xgboost.spark.model.XGBoostRegression
 import org.apache.spark.SparkConf
 import org.apache.spark.ml.evaluation.RegressionEvaluator
@@ -10,9 +11,18 @@ object RegressionExample {
     val sparkConf = new SparkConf().setAppName("RegressionExample")
       .setMaster("local")
     val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    val tempFileResource = new TemporaryFileResource
 
-    val modelPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/housing.model.spark")
-    val testDataPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/housing.test")
+    try {
+      run(sparkSession, tempFileResource)
+    } finally {
+      tempFileResource.close()
+    }
+  }
+
+  def run(sparkSession: SparkSession, tempFileResource: TemporaryFileResource) {
+    val modelPath = tempFileResource.getAsPath("model/gbtree/spark/housing.model.spark").toString
+    val testDataPath = tempFileResource.getAsPath("data/housing.test").toString
 
     val regressor = XGBoostRegression.load(modelPath)
     val df = sparkSession.sqlContext.read
@@ -32,6 +42,4 @@ object RegressionExample {
 
     println(s"RMSE: $rmse")
   }
-
-  def getResourcePath(name: String): String = getClass.getResource(name).getPath
 }

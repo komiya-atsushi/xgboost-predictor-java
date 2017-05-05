@@ -1,6 +1,0 @@
-We use mushroom data set from UCI machine learning repository (https://archive.ics.uci.edu/ml/datasets/Mushroom)
-for validation/testing purpose.
-
-Origin:
-Mushroom records drawn from The Audubon Society Field Guide to North American Mushrooms (1981). G. H. Lincoff (Pres.),
-New York: Alfred A. Knopf

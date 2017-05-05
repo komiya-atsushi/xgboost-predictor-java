@@ -1,6 +1,7 @@
 package biz.k11i.xgboost.demo;
 
 import biz.k11i.xgboost.Predictor;
+import biz.k11i.xgboost.TestHelper;
 import biz.k11i.xgboost.util.FVec;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class Example {
     public static void main(String[] args) throws IOException {
         List<SimpleEntry<Integer, FVec>> data = loadData();
-        Predictor predictor = new Predictor(Example.class.getResourceAsStream("model/binary-logistic.model"));
+        Predictor predictor = new Predictor(TestHelper.getResourceAsStream("model/gbtree/v47/binary-logistic.model"));
 
         predictAndLogLoss(predictor, data);
 
@@ -74,7 +75,7 @@ public class Example {
     static List<SimpleEntry<Integer, FVec>> loadData() throws IOException {
         List<SimpleEntry<Integer, FVec>> result = new ArrayList<>();
 
-        for (String line : Files.readAllLines(new File(Example.class.getResource("model/agaricus.txt.test").getPath()).toPath(), StandardCharsets.UTF_8)) {
+        for (String line : Files.readAllLines(new File(TestHelper.getResourcePath("data/agaricus.txt.0.test")).toPath(), StandardCharsets.UTF_8)) {
             String[] values = line.split(" ");
 
             Map<Integer, Float> map = new HashMap<>();

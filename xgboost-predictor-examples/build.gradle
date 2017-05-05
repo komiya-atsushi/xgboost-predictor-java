@@ -3,5 +3,6 @@ apply plugin: 'scala'
 dependencies {
     compile project(":xgboost-predictor")
     compile project(":xgboost-predictor-spark${scalaSuffix}")
+    compile project(":xgboost-predictor-test")
     compile group: 'org.apache.spark', name: "spark-mllib${scalaSuffix}", version: sparkVersion
 }

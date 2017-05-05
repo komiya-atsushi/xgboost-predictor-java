@@ -1,5 +1,6 @@
 package biz.k11i.xgboost.spark.demo
 
+import biz.k11i.xgboost.TemporaryFileResource
 import biz.k11i.xgboost.spark.model.XGBoostMultiClassification
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
@@ -9,9 +10,18 @@ object MultiClassificationExample {
     val sparkConf = new SparkConf().setAppName("MultiClassificationExample")
       .setMaster("local")
     val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    val tempFileResource = new TemporaryFileResource
 
-    val modelPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/iris.model.spark")
-    val testDataPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/iris.test")
+    try {
+      run(sparkSession, tempFileResource)
+    } finally {
+      tempFileResource.close()
+    }
+  }
+
+  def run(sparkSession: SparkSession, tempFileResource: TemporaryFileResource) {
+    val modelPath = tempFileResource.getAsPath("model/gbtree/spark/iris.model.spark").toString
+    val testDataPath = tempFileResource.getAsPath("data/iris.test").toString
 
     val multiclassClassifier = XGBoostMultiClassification.load(modelPath)
       .setRawPredictionCol("rawPrediction")
@@ -22,6 +32,4 @@ object MultiClassificationExample {
       .select("rawPrediction", "probability", "prediction", "label")
       .show(false)
   }
-
-  def getResourcePath(name: String): String = getClass.getResource(name).getPath
 }

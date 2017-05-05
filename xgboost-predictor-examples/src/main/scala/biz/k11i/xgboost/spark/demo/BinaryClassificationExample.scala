@@ -1,5 +1,6 @@
 package biz.k11i.xgboost.spark.demo
 
+import biz.k11i.xgboost.TemporaryFileResource
 import biz.k11i.xgboost.spark.model.XGBoostBinaryClassification
 import org.apache.spark.SparkConf
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
@@ -10,9 +11,18 @@ object BinaryClassificationExample {
     val sparkConf = new SparkConf().setAppName("BinaryClassificationExample")
       .setMaster("local")
     val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    val tempFileResource = new TemporaryFileResource
 
-    val modelPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/agaricus.model.spark")
-    val testDataPath = getResourcePath("/biz/k11i/xgboost/demo/model/spark/agaricus.txt.test")
+    try {
+      run(sparkSession, tempFileResource)
+    } finally {
+      tempFileResource.close()
+    }
+  }
+
+  def run(sparkSession: SparkSession, tempFileResource: TemporaryFileResource) {
+    val modelPath = tempFileResource.getAsPath("model/gbtree/spark/agaricus.model.spark").toString
+    val testDataPath = tempFileResource.getAsPath("data/agaricus.txt.1.test").toString
 
     val binaryClassifier = XGBoostBinaryClassification.load(modelPath)
       .setRawPredictionCol("rawPrediction")
@@ -36,6 +46,4 @@ object BinaryClassificationExample {
 
     println(s"AUC: $areaUnderROC")
   }
-
-  def getResourcePath(name: String): String = getClass.getResource(name).getPath
 }
