@@ -28,3 +28,17 @@ This dataset was taken from the StatLib library which is maintained at Carnegie 
 Creator:
 Harrison, D. and Rubinfeld, D.L.
 'Hedonic prices and the demand for clean air', J. Environ. Economics & Management, vol.5, 81-102, 1978.
+
+
+# SMS spam collection
+
+Source:
+
+Tiago A. Almeida (talmeida ufscar.br)
+Department of Computer Science
+Federal University of Sao Carlos (UFSCar)
+Sorocaba, Sao Paulo - Brazil
+
+JosÃ© MarÃ­a GÃ³mez Hidalgo (jmgomezh yahoo.es)
+R&D Department Optenet
+Las Rozas, Madrid - Spain

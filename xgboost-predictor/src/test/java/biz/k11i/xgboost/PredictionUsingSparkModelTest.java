@@ -1,5 +1,6 @@
 package biz.k11i.xgboost;
 
+import biz.k11i.xgboost.test.PredictionTestBase;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;

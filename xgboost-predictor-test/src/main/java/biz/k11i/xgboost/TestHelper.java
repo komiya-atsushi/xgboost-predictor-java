@@ -76,6 +76,10 @@ public class TestHelper {
             this.oneBasedIndex = oneBasedIndex;
         }
 
+        public String path() {
+            return path;
+        }
+
         public List<FVec> load() throws IOException {
             try (InputStream stream = getResourceAsStream(path);
                  InputStreamReader isr = new InputStreamReader(stream);
@@ -110,6 +114,10 @@ public class TestHelper {
 
         Expectation(String path) {
             this.path = path;
+        }
+
+        public String path() {
+            return path;
         }
 
         public List<double[]> load() throws IOException {

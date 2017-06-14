@@ -2,4 +2,8 @@ apply plugin: 'java'
 
 dependencies {
     compile project(":xgboost-predictor")
+    compileOnly (group: 'junit', name: 'junit', version: '4.12') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    compileOnly group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
 }

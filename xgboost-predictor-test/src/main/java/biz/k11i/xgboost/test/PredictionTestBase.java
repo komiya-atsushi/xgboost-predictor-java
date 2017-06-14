@@ -1,5 +1,7 @@
-package biz.k11i.xgboost;
+package biz.k11i.xgboost.test;
 
+import biz.k11i.xgboost.Predictor;
+import biz.k11i.xgboost.TestHelper;
 import biz.k11i.xgboost.util.FVec;
 
 import java.io.IOException;
@@ -12,25 +14,39 @@ import static org.hamcrest.Matchers.is;
 
 public abstract class PredictionTestBase {
 
-    static class PredictionModel {
+    public static class PredictionModel {
         final String path;
 
-        PredictionModel(String path) {
+        public PredictionModel(String path) {
             this.path = path;
         }
 
         Predictor load() throws IOException {
-            try (InputStream stream = PredictionTestBase.class.getResourceAsStream(path)) {
+            try (InputStream stream = TestHelper.getResourceAsStream(path)) {
                 return new Predictor(stream);
             }
         }
     }
 
-    static abstract class PredictionTask {
+    public static abstract class PredictionTask {
         final String name;
+        private final String expectationSuffix;
 
         PredictionTask(String name) {
+            this(name, name);
+        }
+
+        PredictionTask(String name, String expectationSuffix) {
             this.name = name;
+            this.expectationSuffix = expectationSuffix;
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public String expectationSuffix() {
+            return expectationSuffix;
         }
 
         abstract double[] predict(Predictor predictor, FVec feat);
@@ -43,7 +59,7 @@ public abstract class PredictionTestBase {
             return result;
         }
 
-        static PredictionTask predict() {
+        public static PredictionTask predict() {
             return new PredictionTask("predict") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
@@ -52,7 +68,7 @@ public abstract class PredictionTestBase {
             };
         }
 
-        static PredictionTask predictWithNTreeLimit(final int ntree_limit) {
+        public static PredictionTask predictWithNTreeLimit(final int ntree_limit) {
             return new PredictionTask("predict_ntree") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
@@ -61,7 +77,7 @@ public abstract class PredictionTestBase {
             };
         }
 
-        static PredictionTask predictMargin() {
+        public static PredictionTask predictMargin() {
             return new PredictionTask("margin") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
@@ -70,8 +86,8 @@ public abstract class PredictionTestBase {
             };
         }
 
-        static PredictionTask predictSingle() {
-            return new PredictionTask("predict_single") {
+        public static PredictionTask predictSingle() {
+            return new PredictionTask("predict_single", "predict") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
                     return new double[]{predictor.predictSingle(feat)};
@@ -79,7 +95,7 @@ public abstract class PredictionTestBase {
             };
         }
 
-        static PredictionTask predictLeaf() {
+        public static PredictionTask predictLeaf() {
             return new PredictionTask("leaf") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
@@ -88,7 +104,7 @@ public abstract class PredictionTestBase {
             };
         }
 
-        static PredictionTask predictLeafWithNTree(final int ntree_limit) {
+        public static PredictionTask predictLeafWithNTree(final int ntree_limit) {
             return new PredictionTask("leaf_ntree") {
                 @Override
                 double[] predict(Predictor predictor, FVec feat) {
@@ -98,14 +114,14 @@ public abstract class PredictionTestBase {
         }
     }
 
-    void verify(
+    protected void verify(
             PredictionModel model,
             TestHelper.TestData _testData,
             TestHelper.Expectation _expectedData,
             PredictionTask predictionTask) throws IOException {
 
         String context = String.format("[model: %s, test: %s, expected: %s, task: %s]",
-                model.path, _testData.path, _expectedData.path, predictionTask.name);
+                model.path, _testData.path(), _expectedData.path(), predictionTask.name);
         System.out.println(context);
 
         Predictor predictor = model.load();
