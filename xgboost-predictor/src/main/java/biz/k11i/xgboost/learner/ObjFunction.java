@@ -1,5 +1,6 @@
 package biz.k11i.xgboost.learner;
 
+import biz.k11i.xgboost.config.PredictorConfiguration;
 import net.jafama.FastMath;
 
 import java.io.Serializable;
@@ -39,6 +40,7 @@ public class ObjFunction implements Serializable {
      *
      * @param name name of objective function
      * @param objFunction objective function
+     * @deprecated This method will be made private. Please use {@link PredictorConfiguration.Builder#objFunction(ObjFunction)} instead.
      */
     public static void register(String name, ObjFunction objFunction) {
         FUNCTIONS.put(name, objFunction);

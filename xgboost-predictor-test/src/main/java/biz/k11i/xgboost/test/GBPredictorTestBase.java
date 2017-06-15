@@ -1,6 +1,7 @@
 package biz.k11i.xgboost.test;
 
 import biz.k11i.xgboost.TestHelper;
+import biz.k11i.xgboost.config.PredictorConfiguration;
 import biz.k11i.xgboost.learner.ObjFunction;
 import org.junit.After;
 import org.junit.experimental.theories.DataPoints;
@@ -88,8 +89,8 @@ public abstract class GBPredictorTestBase extends PredictionTestBase {
             this.task = task;
         }
 
-        public PredictionModel predictionModel() {
-            return new PredictionModel(modelPath);
+        public PredictionModel predictionModel(PredictorConfiguration configuration) {
+            return new PredictionModel(modelPath, configuration);
         }
 
         public TestData testData() {
@@ -126,12 +127,13 @@ public abstract class GBPredictorTestBase extends PredictionTestBase {
     @Theory
     public void testPredict(
             TestParameter parameter,
+            PredictorConfiguration configuration,
             boolean useJafama) throws IOException {
 
         ObjFunction.useFastMathExp(useJafama);
 
         verify(
-                parameter.predictionModel(),
+                parameter.predictionModel(configuration),
                 parameter.testData(),
                 parameter.expectation(),
                 parameter.task);

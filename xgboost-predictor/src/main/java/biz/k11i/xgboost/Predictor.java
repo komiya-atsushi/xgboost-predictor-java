@@ -1,5 +1,6 @@
 package biz.k11i.xgboost;
 
+import biz.k11i.xgboost.config.PredictorConfiguration;
 import biz.k11i.xgboost.gbm.GradBooster;
 import biz.k11i.xgboost.learner.ObjFunction;
 import biz.k11i.xgboost.spark.SparkModelParam;
@@ -21,16 +22,26 @@ public class Predictor implements Serializable {
     private ObjFunction obj;
     private GradBooster gbm;
 
+    public Predictor(InputStream in) throws IOException {
+        this(in, null);
+    }
+
     /**
      * Instantiates with the Xgboost model
      *
      * @param in input stream
+     * @param configuration configuration
      * @throws IOException If an I/O error occurs
      */
-    public Predictor(InputStream in) throws IOException {
+    public Predictor(InputStream in, PredictorConfiguration configuration) throws IOException {
+        if (configuration == null) {
+            configuration = PredictorConfiguration.DEFAULT;
+        }
+
         ModelReader reader = new ModelReader(in);
 
         readParam(reader);
+        initObjFunction(configuration);
         initObjGbm();
 
         gbm.loadModel(reader, mparam.saved_with_pbuffer != 0);
@@ -96,6 +107,14 @@ public class Predictor implements Serializable {
 
         name_obj = reader.readString();
         name_gbm = reader.readString();
+    }
+
+    void initObjFunction(PredictorConfiguration configuration) {
+        obj = configuration.getObjFunction();
+
+        if (obj == null) {
+            obj = ObjFunction.fromName(name_obj);
+        }
     }
 
     void initObjGbm() {

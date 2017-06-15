@@ -2,6 +2,7 @@ package biz.k11i.xgboost.test;
 
 import biz.k11i.xgboost.Predictor;
 import biz.k11i.xgboost.TestHelper;
+import biz.k11i.xgboost.config.PredictorConfiguration;
 import biz.k11i.xgboost.util.FVec;
 
 import java.io.IOException;
@@ -16,14 +17,20 @@ public abstract class PredictionTestBase {
 
     public static class PredictionModel {
         final String path;
+        final PredictorConfiguration configuration;
 
         public PredictionModel(String path) {
+            this(path, null);
+        }
+
+        public PredictionModel(String path, PredictorConfiguration configuration) {
             this.path = path;
+            this.configuration = configuration;
         }
 
         Predictor load() throws IOException {
             try (InputStream stream = TestHelper.getResourceAsStream(path)) {
-                return new Predictor(stream);
+                return new Predictor(stream, configuration);
             }
         }
     }
