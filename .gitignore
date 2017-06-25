@@ -8,3 +8,6 @@ build/
 
 # Spark
 derby.log
+
+tmp/
+
