@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.2.1
+
+- Support an objective function: `"rank:pairwise"`
+
 ## 0.2.0
 
 - Support XGBoost4J-Spark-generated model file format.

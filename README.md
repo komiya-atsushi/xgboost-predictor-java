@@ -25,7 +25,7 @@ If you use **Maven**:
   <dependency>
     <groupId>biz.k11i</groupId>
     <artifactId>xgboost-predictor</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
   </dependency>
 </dependencies>
 ```
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.2.0'
+    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.2.1'
 }
 ```
 
@@ -49,7 +49,7 @@ Or **sbt**:
 resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
-  "biz.k11i" % "xgboost-predictor" % "0.2.0"
+  "biz.k11i" % "xgboost-predictor" % "0.2.1"
 )
 ```
 
@@ -131,6 +131,7 @@ Xgboost-predictor-java is about **6,000 to 10,000 times faster than** xgboost4j 
     - "multi:softmax"
     - "multi:softprob"
     - "reg:linear"
+    - "rank:pairwise"
 - API
     - Predicts probability or classification
         - `Predictor#predict(FVec)`
