@@ -62,6 +62,15 @@ public final class TestParameters {
                         .testData("agaricus.txt.0.test", false)
                         .tasks(PredictionTask.predictSingle()),
 
+                // rank:pairwise
+                new TestParameter.Builder()
+                        .modelType("gbtree")
+                        .modelNames("v47/rank-pairwise")
+                        .testData("mq2008.test", false)
+                        .tasks(
+                                PredictionTask.predict(),
+                                PredictionTask.predictSingle()),
+
                 // Binary classification
                 new TestParameter.Builder()
                         .modelType("gbtree")
