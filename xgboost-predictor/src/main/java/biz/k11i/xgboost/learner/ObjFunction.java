@@ -14,6 +14,7 @@ public class ObjFunction implements Serializable {
     private static final Map<String, ObjFunction> FUNCTIONS = new HashMap<>();
 
     static {
+        register("rank:pairwise", new ObjFunction());
         register("binary:logistic", new RegLossObjLogistic());
         register("binary:logitraw", new ObjFunction());
         register("multi:softmax", new SoftmaxMultiClassObjClassify());
