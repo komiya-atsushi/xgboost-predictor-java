@@ -22,6 +22,8 @@ public interface GradBooster extends Serializable {
                 return new GBTree();
             } else if ("gblinear".equals(name)) {
                 return new GBLinear();
+            } else if ("dart".equals(name)) {
+                return new Dart();
             }
 
             throw new IllegalArgumentException(name + " is not supported model.");
