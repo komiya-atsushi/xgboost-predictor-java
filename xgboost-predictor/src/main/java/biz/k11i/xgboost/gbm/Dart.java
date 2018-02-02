@@ -5,8 +5,6 @@ import biz.k11i.xgboost.util.FVec;
 import biz.k11i.xgboost.util.ModelReader;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Gradient boosted DART tree implementation.
