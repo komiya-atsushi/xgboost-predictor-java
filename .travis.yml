@@ -4,3 +4,7 @@ dist: precise
 jdk:
   - oraclejdk7
   - openjdk7
+addons:
+  hosts:
+    - xgboosthost
+  hostname: xgboosthost
