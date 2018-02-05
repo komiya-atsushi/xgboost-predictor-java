@@ -102,4 +102,17 @@ public final class TestParameters {
                                 PredictionTask.predictLeaf())
         );
     }
+
+    public static List<TestParameter> testParametersForDart() {
+        return TestParameter.Builder.merge(
+                // Various prediction methods
+                new TestParameter.Builder()
+                        .modelType("dart")
+                        .modelNames(
+                                "rank-pairwise")
+                        .testData("mq2008.test", false)
+                        .tasks(
+                                PredictionTask.predict())
+        );
+    }
 }

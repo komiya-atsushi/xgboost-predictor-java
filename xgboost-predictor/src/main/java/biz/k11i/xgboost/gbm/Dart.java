@@ -21,7 +21,6 @@ public class Dart extends GBTree {
         super.loadModel(reader, with_pbuffer);
         if (mparam.num_trees != 0) {
             long size = reader.readLong();
-            assert mparam.num_trees == size;
             weightDrop = reader.readFloatArray((int)size);
         }
     }
