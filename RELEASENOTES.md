@@ -1,5 +1,9 @@
 # Release notes
 
+## 0.3.0
+
+- [#27](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/27) Support DART model.
+
 ## 0.2.1
 
 - Support an objective function: `"rank:pairwise"`

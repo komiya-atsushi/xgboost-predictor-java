@@ -125,6 +125,7 @@ Xgboost-predictor-java is about **6,000 to 10,000 times faster than** xgboost4j 
 - Models
     - "gblinear"
     - "gbtree"
+    - "dart"
 - Objective functions
     - "binary:logistic"
     - "binary:logitraw"
