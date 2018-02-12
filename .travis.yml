@@ -1,5 +1,10 @@
 language: java
 script: ./gradlew clean check
+dist: precise
 jdk:
   - oraclejdk7
   - openjdk7
+addons:
+  hosts:
+    - xgboosthost
+  hostname: xgboosthost

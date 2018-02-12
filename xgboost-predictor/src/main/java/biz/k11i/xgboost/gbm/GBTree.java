@@ -11,11 +11,11 @@ import java.io.Serializable;
  * Gradient boosted tree implementation.
  */
 public class GBTree extends GBBase {
-    private ModelParam mparam;
+    ModelParam mparam;
     private RegTree[] trees;
     private int[] tree_info;
 
-    private RegTree[][] _groupTrees;
+    RegTree[][] _groupTrees;
 
     GBTree() {
         // do nothing
