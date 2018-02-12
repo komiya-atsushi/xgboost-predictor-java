@@ -25,7 +25,7 @@ If you use **Maven**:
   <dependency>
     <groupId>biz.k11i</groupId>
     <artifactId>xgboost-predictor</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
   </dependency>
 </dependencies>
 ```
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.2.1'
+    compile group: 'biz.k11i', name: 'xgboost-predictor', version: '0.3.0'
 }
 ```
 
@@ -49,7 +49,7 @@ Or **sbt**:
 resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
-  "biz.k11i" % "xgboost-predictor" % "0.2.1"
+  "biz.k11i" % "xgboost-predictor" % "0.3.0"
 )
 ```
 
