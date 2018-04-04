@@ -23,13 +23,13 @@ subprojects {
     group 'biz.k11i'
 
     compileJava {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     compileTestJava {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     javadoc {
@@ -93,8 +93,8 @@ subprojects {
     createReleaseTag.dependsOn bintrayUpload
 
     task checkJavaVersion << {
-        if (!JavaVersion.current().isJava7()) {
-            String message = "ERROR: Java 7 required but " +
+        if (!JavaVersion.current().isJava8()) {
+            String message = "ERROR: Java 8 required but " +
                     JavaVersion.current() +
                     " found. Change your JAVA_HOME environment variable."
             throw new IllegalStateException(message)
