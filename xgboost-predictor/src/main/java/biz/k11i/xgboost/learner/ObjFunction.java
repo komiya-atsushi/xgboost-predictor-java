@@ -20,6 +20,7 @@ public class ObjFunction implements Serializable {
         register("multi:softmax", new SoftmaxMultiClassObjClassify());
         register("multi:softprob", new SoftmaxMultiClassObjProb());
         register("reg:linear", new ObjFunction());
+        register("reg:logistic", new RegLossObjLogistic());
     }
 
     /**
@@ -56,10 +57,12 @@ public class ObjFunction implements Serializable {
     public static void useFastMathExp(boolean useJafama) {
         if (useJafama) {
             register("binary:logistic", new RegLossObjLogistic_Jafama());
+            register("reg:logistic", new RegLossObjLogistic_Jafama());
             register("multi:softprob", new SoftmaxMultiClassObjProb_Jafama());
 
         } else {
             register("binary:logistic", new RegLossObjLogistic());
+            register("reg:logistic", new RegLossObjLogistic());
             register("multi:softprob", new SoftmaxMultiClassObjProb());
         }
     }
