@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
     }
 
@@ -11,6 +12,7 @@ buildscript {
 
 subprojects {
     repositories {
+        mavenCentral()
         jcenter()
     }
 
