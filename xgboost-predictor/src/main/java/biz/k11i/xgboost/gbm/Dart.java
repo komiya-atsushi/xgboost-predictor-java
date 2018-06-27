@@ -27,7 +27,7 @@ public class Dart extends GBTree {
 
     double pred(FVec feat, int bst_group, int root_index, int ntree_limit) {
         RegTree[] trees = _groupTrees[bst_group];
-        int treeleft = ntree_limit == 0 ? trees.length : ntree_limit;
+        int treeleft = ntree_limit == 0 ? trees.length : Math.min(ntree_limit, trees.length);
 
         double psum = 0;
         for (int i = 0; i < treeleft; i++) {

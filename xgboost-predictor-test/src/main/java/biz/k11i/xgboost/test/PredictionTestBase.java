@@ -84,6 +84,15 @@ public abstract class PredictionTestBase {
             };
         }
 
+        public static PredictionTask predictWithExcessiveNTreeLimit() {
+            return new PredictionTask("predict_excessive_ntree", "predict") {
+                @Override
+                double[] predict(Predictor predictor, FVec feat) {
+                    return predictor.predict(feat, false, 1000);
+                }
+            };
+        }
+
         public static PredictionTask predictMargin() {
             return new PredictionTask("margin") {
                 @Override
