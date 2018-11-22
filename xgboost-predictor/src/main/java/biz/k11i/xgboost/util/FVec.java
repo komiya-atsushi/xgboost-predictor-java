@@ -43,6 +43,28 @@ public interface FVec extends Serializable {
         }
 
         /**
+         * Builds FVec from dense vector.
+         *
+         * @param values          float values
+         * @param treatsValueAsNA treat specify value as N/A
+         * @return FVec
+         */
+        public static FVec fromArray(float[] values, float treatsValueAsNA) {
+            return new FVecArrayImpl.FVecFloatArrayImplement(values, treatsValueAsNA);
+        }
+
+        /**
+         * Builds FVec from dense vector.
+         *
+         * @param values          double values
+         * @param treatsValueAsNA treat specify value as N/A
+         * @return FVec
+         */
+        public static FVec fromArray(double[] values, double treatsValueAsNA) {
+            return new FVecArrayImpl.FVecDoubleArrayImplement(values, treatsValueAsNA);
+        }
+
+        /**
          * Builds FVec from map.
          *
          * @param map map containing non-zero values
@@ -97,6 +119,30 @@ class FVecArrayImpl {
         }
     }
 
+    static class FVecFloatArrayImplement implements FVec {
+        private final float[] values;
+        private final float treatsValueAsNA;
+
+        FVecFloatArrayImplement(float[] values, float treatsValueAsNA) {
+            this.values = values;
+            this.treatsValueAsNA = treatsValueAsNA;
+        }
+
+        @Override
+        public double fvalue(int index) {
+            if (values.length <= index) {
+                return Double.NaN;
+            }
+
+            double result = values[index];
+            if (treatsValueAsNA == result) {
+                return Double.NaN;
+            }
+
+            return result;
+        }
+    }
+
     static class FVecDoubleArrayImpl implements FVec {
         private final double[] values;
         private final boolean treatsZeroAsNA;
@@ -114,6 +160,30 @@ class FVecArrayImpl {
 
             double result = values[index];
             if (treatsZeroAsNA && result == 0) {
+                return Double.NaN;
+            }
+
+            return values[index];
+        }
+    }
+
+    static class FVecDoubleArrayImplement implements FVec {
+        private final double[] values;
+        private final double treatsValueAsNA;
+
+        FVecDoubleArrayImplement(double[] values, double treatsValueAsNA) {
+            this.values = values;
+            this.treatsValueAsNA = treatsValueAsNA;
+        }
+
+        @Override
+        public double fvalue(int index) {
+            if (values.length <= index) {
+                return Double.NaN;
+            }
+
+            double result = values[index];
+            if (treatsValueAsNA == result) {
                 return Double.NaN;
             }
 
