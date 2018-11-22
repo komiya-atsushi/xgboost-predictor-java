@@ -1,4 +1,4 @@
-package biz.k11i.xgboost.util;
+package purexgboost.xgboost.util;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -23,23 +23,43 @@ public interface FVec extends Serializable {
         /**
          * Builds FVec from dense vector.
          *
-         * @param values         float values
-         * @param treatsZeroAsNA treat zero as N/A if true
+         * @param values          float values
          * @return FVec
          */
-        public static FVec fromArray(float[] values, boolean treatsZeroAsNA) {
-            return new FVecArrayImpl.FVecFloatArrayImpl(values, treatsZeroAsNA);
+        public static FVec fromArray(float[] values) {
+            return new FVecArrayImpl.FVecFloatArrayImpl(values, true);  /* treat zero as N/A */
+        }
+
+        /**
+         * Builds FVec from dense vector.
+         *
+         * @param values          float values
+         * @param treatsValueAsNA treat specify value as N/A
+         * @return FVec
+         */
+        public static FVec fromArray(float[] values, float treatsValueAsNA) {
+            return new FVecArrayImpl.FVecFloatArrayImplement(values, treatsValueAsNA);
         }
 
         /**
          * Builds FVec from dense vector.
          *
          * @param values         double values
-         * @param treatsZeroAsNA treat zero as N/A if true
          * @return FVec
          */
-        public static FVec fromArray(double[] values, boolean treatsZeroAsNA) {
-            return new FVecArrayImpl.FVecDoubleArrayImpl(values, treatsZeroAsNA);
+        public static FVec fromArray(double[] values) {
+            return new FVecArrayImpl.FVecDoubleArrayImpl(values, true);  /* treat zero as N/A */
+        }
+
+        /**
+         * Builds FVec from dense vector.
+         *
+         * @param values          double values
+         * @param treatsValueAsNA treat specify value as N/A
+         * @return FVec
+         */
+        public static FVec fromArray(double[] values, double treatsValueAsNA) {
+            return new FVecArrayImpl.FVecDoubleArrayImplement(values, treatsValueAsNA);
         }
 
         /**
@@ -97,6 +117,30 @@ class FVecArrayImpl {
         }
     }
 
+    static class FVecFloatArrayImplement implements FVec {
+        private final float[] values;
+        private final float treatsValueAsNA;
+
+        FVecFloatArrayImplement(float[] values, float treatsValueAsNA) {
+            this.values = values;
+            this.treatsValueAsNA = treatsValueAsNA;
+        }
+
+        @Override
+        public double fvalue(int index) {
+            if (values.length <= index) {
+                return Double.NaN;
+            }
+
+            double result = values[index];
+            if (treatsValueAsNA == result) {
+                return Double.NaN;
+            }
+
+            return result;
+        }
+    }
+
     static class FVecDoubleArrayImpl implements FVec {
         private final double[] values;
         private final boolean treatsZeroAsNA;
@@ -114,6 +158,30 @@ class FVecArrayImpl {
 
             double result = values[index];
             if (treatsZeroAsNA && result == 0) {
+                return Double.NaN;
+            }
+
+            return values[index];
+        }
+    }
+
+    static class FVecDoubleArrayImplement implements FVec {
+        private final double[] values;
+        private final double treatsValueAsNA;
+
+        FVecDoubleArrayImplement(double[] values, double treatsValueAsNA) {
+            this.values = values;
+            this.treatsValueAsNA = treatsValueAsNA;
+        }
+
+        @Override
+        public double fvalue(int index) {
+            if (values.length <= index) {
+                return Double.NaN;
+            }
+
+            double result = values[index];
+            if (treatsValueAsNA == result) {
                 return Double.NaN;
             }
 
