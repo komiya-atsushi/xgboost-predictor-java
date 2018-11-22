@@ -47,6 +47,7 @@ public final class TestParameters {
                         .tasks(
                                 PredictionTask.predict(),
                                 PredictionTask.predictWithNTreeLimit(1),
+                                PredictionTask.predictWithExcessiveNTreeLimit(),
                                 PredictionTask.predictMargin(),
                                 PredictionTask.predictLeaf(),
                                 PredictionTask.predictLeafWithNTree(2)),
@@ -112,7 +113,8 @@ public final class TestParameters {
                                 "rank-pairwise")
                         .testData("mq2008.test", false)
                         .tasks(
-                                PredictionTask.predict())
+                                PredictionTask.predict(),
+                                PredictionTask.predictWithExcessiveNTreeLimit() )
         );
     }
 }
