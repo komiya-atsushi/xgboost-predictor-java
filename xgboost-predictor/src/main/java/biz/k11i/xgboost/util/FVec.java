@@ -23,11 +23,23 @@ public interface FVec extends Serializable {
         /**
          * Builds FVec from dense vector.
          *
-         * @param values          float values
+         * @param values         float values
+         * @param treatsZeroAsNA treat zero as N/A if true
          * @return FVec
          */
-        public static FVec fromArray(float[] values) {
-            return new FVecArrayImpl.FVecFloatArrayImpl(values, true);  /* treat zero as N/A */
+        public static FVec fromArray(float[] values, boolean treatsZeroAsNA) {
+            return new FVecArrayImpl.FVecFloatArrayImpl(values, treatsZeroAsNA);
+        }
+
+        /**
+         * Builds FVec from dense vector.
+         *
+         * @param values         double values
+         * @param treatsZeroAsNA treat zero as N/A if true
+         * @return FVec
+         */
+        public static FVec fromArray(double[] values, boolean treatsZeroAsNA) {
+            return new FVecArrayImpl.FVecDoubleArrayImpl(values, treatsZeroAsNA);
         }
 
         /**
@@ -39,16 +51,6 @@ public interface FVec extends Serializable {
          */
         public static FVec fromArray(float[] values, float treatsValueAsNA) {
             return new FVecArrayImpl.FVecFloatArrayImplement(values, treatsValueAsNA);
-        }
-
-        /**
-         * Builds FVec from dense vector.
-         *
-         * @param values         double values
-         * @return FVec
-         */
-        public static FVec fromArray(double[] values) {
-            return new FVecArrayImpl.FVecDoubleArrayImpl(values, true);  /* treat zero as N/A */
         }
 
         /**
