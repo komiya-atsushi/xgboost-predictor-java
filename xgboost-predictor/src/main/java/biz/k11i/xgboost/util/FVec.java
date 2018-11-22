@@ -1,4 +1,4 @@
-package purexgboost.xgboost.util;
+package biz.k11i.xgboost.util;
 
 import java.io.Serializable;
 import java.util.Map;
