@@ -4,6 +4,7 @@ build/
 
 # IntelliJ IDEA
 .idea/
+out/
 *.iml
 
 # Spark
