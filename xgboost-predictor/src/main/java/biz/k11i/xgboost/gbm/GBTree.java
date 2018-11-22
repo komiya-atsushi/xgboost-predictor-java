@@ -31,9 +31,7 @@ public class GBTree extends GBBase {
             trees[i].loadModel(reader);
         }
 
-        if (mparam.num_trees != 0) {
-            tree_info = reader.readIntArray(mparam.num_trees);
-        }
+        tree_info = mparam.num_trees > 0 ? reader.readIntArray(mparam.num_trees) : new int[0];
 
         if (mparam.num_pbuffer != 0 && with_pbuffer) {
             reader.skip(4 * mparam.predBufferSize());
