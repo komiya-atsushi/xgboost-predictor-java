@@ -1,5 +1,12 @@
 # Release notes
 
+## 0.3.1
+
+- [#23](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/23) Add method `FVec.Transformer#fromArray(float[] values, float treatsValueAsNA)`.
+- [#29](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/29) Support for loading reg:logistic models.
+- [#35](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/35) Handle ntree_limit higher than number of trees in GBTree and Dart model in graceful way.
+- [#36](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/36) Fixes NPE when predicting on an empty "gbtree" model.
+
 ## 0.3.0
 
 - [#27](https://github.com/komiya-atsushi/xgboost-predictor-java/pull/27) Support DART model.
