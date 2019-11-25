@@ -132,6 +132,7 @@ Xgboost-predictor-java is about **6,000 to 10,000 times faster than** xgboost4j 
     - "multi:softmax"
     - "multi:softprob"
     - "reg:linear"
+    - "reg:squarederror"
     - "rank:pairwise"
 - API
     - Predicts probability or classification

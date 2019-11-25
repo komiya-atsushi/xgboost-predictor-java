@@ -20,6 +20,7 @@ public class ObjFunction implements Serializable {
         register("multi:softmax", new SoftmaxMultiClassObjClassify());
         register("multi:softprob", new SoftmaxMultiClassObjProb());
         register("reg:linear", new ObjFunction());
+        register("reg:squarederror", new ObjFunction());
         register("reg:logistic", new RegLossObjLogistic());
     }
 
