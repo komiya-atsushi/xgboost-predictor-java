@@ -30,7 +30,7 @@ dependencies {
 }
 
 test {
-    maxParallelForks = 1
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     maxHeapSize = "2g"
     jvmArgs '-XX:MaxPermSize=512m'
 }
